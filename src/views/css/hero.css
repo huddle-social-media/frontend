@@ -1,0 +1,95 @@
+.hero {
+    background-image: url("../img/emilio-garcia-AWdCgDDedH0-unsplash.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    height: 355px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.propic {
+    background-color: #333333;
+    border-radius: 100%;
+}
+
+.hero__propic {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    left: 20px;
+    top: 90px;
+    z-index: 1;
+}
+
+.hero__details {
+    position: absolute;
+    background-color: #ececec8f;
+    border-radius: 10px;
+    width: 635px;
+    height: 180px;
+    bottom: 10px;
+    font-family: 'PT Sans', sans-serif;
+}
+
+.hero__details__follow {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    left: 450px;
+    margin-top: 10px;
+}
+
+.hero__details__follow > * {
+    margin-right: 10px;
+}
+
+.follow__btn {
+    background-color: #dfdfdf;
+    width: 100px;
+    text-align: center;
+    border-radius: 20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.hero__details__user {
+    display: flex;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.hero__details__user > div  {
+    margin-right: 24px;
+}
+
+.profile--name {
+    font-weight: 700;
+}
+
+.hero__details__bio {
+    width: 615px;
+    height: 60px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.hero__details__info {
+    display: flex;
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.hero__details__info > div {
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero__details__info > div > i {
+    margin-right: 4px;
+}

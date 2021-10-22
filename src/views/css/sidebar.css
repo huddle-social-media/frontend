@@ -1,0 +1,79 @@
+.sidebar {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    color: #333333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar__head {
+    display: flex;
+    align-items: center;
+    height: 96px;
+}
+
+.sidebar__head__logo {
+    font-family: 'Comfortaa', cursive;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+}
+
+
+.sidebar__search__cover {
+    height: 48px;
+    width: 170px;
+    background-color: #dfdfdf;
+    border-radius: 28px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar__search {
+    border: none;
+    width: 100px;
+    background-color: transparent;
+    outline: none;
+    margin-left: 15px;
+}
+
+input[type="search"] {
+    font-family: 'Open Sans', sans-serif;
+}
+
+input[type="search"]::placeholder {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.sidebar__search__icon {
+    margin-left: 5px;
+    margin-right: 15px;
+}
+
+.sidebar__nav__links {
+    width: 75%;
+}
+
+.sidebar__nav__links > a {
+    height: 70px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.sidebar__nav__links > a:hover {
+    background-color: #808080;
+    border-radius: 36px;
+    cursor: pointer;
+}
+
+.panel__icon {
+    margin-right: 20px;
+}

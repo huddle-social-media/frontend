@@ -1,0 +1,6 @@
+const eventTableEvents = {
+    SELECT_GOING_EVENTS: "EVENT_TABLE/SELECT_GOING_EVENTS",
+    SELECT_NEAR_EVENTS: "EVENT_TABLE/SELECT_NEAR_EVENTS"
+}
+
+export { eventTableEvents };

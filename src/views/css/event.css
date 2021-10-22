@@ -1,0 +1,226 @@
+.nav-area{
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    padding-top:12px;
+    padding-bottom: 12px;
+}
+
+.nav-area button{
+    margin-left: 32px;
+    width: 114px;
+    height: 24px;
+    background: #08AA82;
+    border-radius: 12px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #FFFFFF;
+    
+}
+
+
+    /* Seperator */
+
+.seperator{
+    display: flex;
+    flex-direction: row;
+    height:50px;
+    border-bottom: 1px solid rgba(95, 95, 95, 0.4);
+}
+
+.seperator button{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.going-section{
+    flex:1;
+    text-align: center;
+    border-bottom: 5px solid #08AA82;
+}
+
+.nearme-section{
+    flex:1;
+    text-align: center;
+
+}
+
+
+   /* event Table */
+
+
+   .event-table{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+        /* Heading */
+
+.event-table-heading{
+    display: flex;
+    height:50px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(95, 95, 95, 0.4);
+}
+
+.event-table-heading div{
+    flex:1;
+    padding-top: 14px;
+    text-align: center;
+}
+
+
+        /* event Row */
+.event-row{
+    display: flex;
+    flex-direction: column;
+}
+
+            /* event Row Visible Section*/
+
+.event-row-visible{
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 13px;
+    border-bottom: 1px solid rgba(95, 95, 95, 0.4);
+}
+
+.event-row-visible button{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    
+}
+
+.event-row-visible-button-1{
+    display: flex;
+    margin-top: 14px;
+    flex:19;
+}
+
+.event-row-visible-button-1 div{
+    flex:1;
+}
+
+            /* event Row Expanded Section */
+
+
+.event-expand-container{
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgba(95, 95, 95, 0.4);
+}
+
+.event-row-expand-1{
+    display: flex;
+    flex-direction: row;
+    text-align: right;
+}
+
+.event-row-expand-1-content{
+    display: flex;
+    flex-direction: row;
+    flex:24;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+    margin-top: 17px;
+    margin-bottom: 6px;
+    /* identical to box height */
+
+
+    color: #000000;
+}
+
+.event-row-expand-1-celebNames-names{
+    margin-left:28px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+    /* identical to box height */
+
+
+    color: #08AA82;
+
+}
+
+.events-row-expand-1-content-interest-1{
+    margin-left: 52px;
+    width: 85px;
+    height: 24px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.event-row-expand-button-minimize{
+    flex:1;
+}
+
+.event-row-expand-2{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 38px 28px 27px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+
+.event-row-expand-2-content-1{
+    margin-bottom: 38px;
+    text-align: justify;
+}
+
+.event-row-expand-2-content-2{
+    display: flex;
+    flex-direction: column;
+}
+
+.event-row-expand-2-content-1-media img{
+    width: 540px;
+    height: 350px;
+}
+
+.event-row-expand-2-content-2-buttons{
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 24px;
+    text-align: right;
+}
+
+.event-row-expand-2-content-2-button-1{
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    color: #FFFFFF;
+    height:21px;
+    background: #E52424;
+    border-radius: 12px;
+    padding: 0px 10px;
+    margin-right: 25px;
+    margin-top: 10px
+
+}
