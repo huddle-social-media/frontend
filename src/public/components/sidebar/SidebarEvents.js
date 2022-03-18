@@ -1,3 +1,5 @@
-const SELECT_NEW_SECTION = "SIDEBAR/SELECT_NEW_SECTION";
+const sidebarEvents = {
+    SELECT_A_SECTION: 'SIDEBAR/SELECT_A_SECTION'
+}
 
-export { SELECT_NEW_SECTION };
+export default sidebarEvents;

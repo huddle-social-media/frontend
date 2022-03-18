@@ -1,10 +1,8 @@
-import { createAction } from "../../lib/actionCreators/createAction.js";
-import { SELECT_NEW_SECTION } from "./SidebarEvents.js";
-
-const selectNewSection = createAction(SELECT_NEW_SECTION);
+import sidebarEvents from "./SidebarEvents.js";
+import createAction from "../../lib/flux/actionCreator/actionCreator.js";
 
 const sidebarActions = {
-    selectNewSection: selectNewSection
+    selectASection: createAction(sidebarEvents.SELECT_A_SECTION)
 }
 
-export { sidebarActions };
+export default sidebarActions;

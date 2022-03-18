@@ -1,0 +1,154 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.grid__collg1 {
+    grid-column: span 1;
+}
+
+.grid__collg2 {
+    grid-column: span 2;
+}
+
+.grid__collg3 {
+    grid-column: span 3;
+}
+
+.grid__collg4 {
+    grid-column: span 4;
+}
+
+.grid__collg5 {
+    grid-column: span 5;
+}
+
+.grid__collg6 {
+    grid-column: span 6;
+}
+
+.grid__collg7 {
+    grid-column: span 7;
+}
+
+.grid__collg8 {
+    grid-column: span 8;
+}
+
+.grid__collg9 {
+    grid-column: span 9;
+}
+
+.grid__collg10 {
+    grid-column: span 10;
+}
+
+.grid__collg11 {
+    grid-column: span 11;
+}
+
+.grid__collg12 {
+    grid-column: span 12;
+}
+
+@media screen and (max-device-width:1284px), 
+screen and (max-width: 1284px) {
+    .grid__colmd1 {
+        grid-column: span 1;
+    }
+    
+    .grid__colmd2 {
+        grid-column: span 2;
+    }
+    
+    .grid__colmd3 {
+        grid-column: span 3;
+    }
+    
+    .grid__colmd4 {
+        grid-column: span 4;
+    }
+    
+    .grid__colmd5 {
+        grid-column: span 5;
+    }
+    
+    .grid__colmd6 {
+        grid-column: span 6;
+    }
+    
+    .grid__colmd7 {
+        grid-column: span 7;
+    }
+    
+    .grid__colmd8 {
+        grid-column: span 8;
+    }
+    
+    .grid__colmd9 {
+        grid-column: span 9;
+    }
+    
+    .grid__colmd10 {
+        grid-column: span 10;
+    }
+    
+    .grid__colmd11 {
+        grid-column: span 11;
+    }
+    
+    .grid__colmd12 {
+        grid-column: span 12;
+    }
+}
+
+@media screen and (max-device-width:600px), 
+screen and (max-width: 600px) {
+    .grid__colsm1 {
+        grid-column: span 1;
+    }
+    
+    .grid__colsm2 {
+        grid-column: span 2;
+    }
+    
+    .grid__colsm3 {
+        grid-column: span 3;
+    }
+    
+    .grid__colsm4 {
+        grid-column: span 4;
+    }
+    
+    .grid__colsm5 {
+        grid-column: span 5;
+    }
+    
+    .grid__colsm6 {
+        grid-column: span 6;
+    }
+    
+    .grid__colsm7 {
+        grid-column: span 7;
+    }
+    
+    .grid__colsm8 {
+        grid-column: span 8;
+    }
+    
+    .grid__colsm9 {
+        grid-column: span 9;
+    }
+    
+    .grid__colsm10 {
+        grid-column: span 10;
+    }
+    
+    .grid__colsm11 {
+        grid-column: span 11;
+    }
+    
+    .grid__colsm12 {
+        grid-column: span 12;
+    }
+}

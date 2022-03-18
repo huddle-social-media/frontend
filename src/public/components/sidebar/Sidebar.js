@@ -1,44 +1,58 @@
-import Component from "../component/Component.js";
-import { sidebarActions } from "./SidebarActions.js";
-import { sidebarReducer } from "./SidebarReducer.js";
-import iniState from "./initState.js";
+import Component from "../../lib/flux/component/Component.js";
+import sidebarActions from "./SidebarActions.js";
+import sidebarEvents from "./SidebarEvents.js";
+import sidebarReducer from "./SidebarReducer.js";
+import initState from "./initState.js";
 
-class Sidebar extends Component
-{
+class Sidebar extends Component {
     constructor(props = {}) {
         super(props);
         this.render = this.render.bind(this);
-        this.onSelect = this.onSelect.bind(this);
-        this.setReducer('sidebar',sidebarReducer, iniState);
+        this.subscriber = this.subscriber.bind(this);
+        this.renderSelection = this.renderSelection.bind(this);
+        this.setReducer(this.name, sidebarReducer, initState);
+        this.setSubscriber(this.name, this.subscriber);
     }
 
-    onSelect(event)
-    {
-        event.preventDefault();
-        let selectedSection = event.target.getAttribute("data-link");
-        this.dispatch(sidebarActions.selectNewSection({selectedSection: selectedSection}));
-        console.log(window.__GLOB_STATE__);
+    subscriber(state, action) {
+        switch(action.type) {
+            case sidebarEvents.SELECT_A_SECTION : {
+                const currentSection = this.getState().currentSection;
+                const previousSection = this.getState().previousSection;
+                this.renderSelection(currentSection, previousSection);
+            }
+        }
+    }
+    
+    renderSelection(current, previous = null) {
+        if(previous) {
+            this.refs[previous+"Vec"].style.display = "none";
+            this.refs[previous+"Icon"].style.color = "inherit";
+            this.refs[previous+"Link"].style.color = "inherit";
+            this.refs[previous+"Link"].style.fontWeight = "500";
+        }
+        this.refs[current+"Vec"].style.display = "block";
+        this.refs[current+"Icon"].style.color = "#ffffff";
+        this.refs[current+"Link"].style.color = "#FE793D";
+        this.refs[current+"Link"].style.fontWeight = "600";
     }
 
     render() {
-       let sidebar = `
-        <div class="sidebar" data-ref="sidebar">
-                <div class="sidebar__head">
-                    <h1 class="sidebar__head__logo">hd</h1>
-                    <!--<div class="sidebar__search__cover">
-                        <input class="sidebar__search" type="search" placeholder="Search Huddle"><i class="material-icons-outlined sidebar__search__icon">search</i></div>-->
-                </div>
-                <div class="sidebar__nav__links">`;
-        if(this.props.links)
-        {
-            let links = Object.keys(this.props.links);
-            links.forEach(link => {
-                sidebar = sidebar.concat(`<a href="${this.props.links[link].route}" class="sidebar__nav__link" data-link="${link}" onclick="window.sidebar.onSelect(event)"><i class="material-icons-outlined panel__icon">${this.props.links[link].icon}</i>${link}</a>`);
+        let htmlStr = `<div class="t-lg f-w-md t-color-dark-gray grid left-panel-navs v-margin-t-64px">`;
+        if(this.props.sidebarLinks) {
+            const linkList = Object.keys(this.props.sidebarLinks);
+            linkList.forEach( element => {
+                htmlStr = htmlStr.concat(`<div class="left-nav-links grid__collg12 grid__colmd2 grid__colsm2">
+                    <div class="select-vec">
+                        <img data-ref="${this.props.sidebarLinks[element].href+"Vec"}" style="display: none" src="/static/icons/select_vec/vec_liquid.svg" class="rotate-vec">
+                    </div>
+                    <a href data-ref="${this.props.sidebarLinks[element].href}" data-link="${this.props.sidebarLinks[element].href}" style="z-index: 1"><span class="material-icons" data-ref="${this.props.sidebarLinks[element].href+"Icon"}" data-link="${this.props.sidebarLinks[element].href}">${this.props.sidebarLinks[element].icon}</span><span class="hide-nav-names" data-ref="${this.props.sidebarLinks[element].href+"Link"}" data-link="${this.props.sidebarLinks[element].href}">${this.props.sidebarLinks[element].name}</span></a>
+                </div>`);
             });
         }
-        sidebar = sidebar.concat(`</div></div>`);
-        return sidebar;
+        htmlStr = htmlStr.concat(`</div>`);
+        return htmlStr;
     }
 }
 
-export {Sidebar};
+export default Sidebar;

@@ -1,0 +1,71 @@
+<form id="sign-in-form">
+        <input id="input-email" type="email" required>
+        <input id="input-password" type="password" required>
+        <input type="submit" value="sign in">
+    </form>
+    <button id="check-btn">Check</button>
+    <button id="silent-auth-btn">Silent Auth</button>
+    <script>
+        const signIn = async (emailAddress, password) => {
+            const res = await fetch("https://huddleapi.com/users/login", {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ email: emailAddress, password: password }),
+                mode: "cors",
+                origin: "https://huddle.com",
+                credentials: "include"
+            });
+            if(res.ok) {
+                const data = await res.json();
+                localStorage.setItem('access_token', data.data.accessToken);
+                console.log(data.data);
+            }else {
+                console.log('failed!');
+            }
+        }
+
+        document.getElementById('check-btn').addEventListener('click', async () => {
+            const res = await fetch("https://huddleapi.com/users", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', 
+                    'Authorization': 'Bearer '+localStorage.getItem('access_token')
+                },
+                credentials: 'include',
+                mode: 'cors',
+                origin: "https://huddle.com"
+            });
+            if(res.ok) {
+                console.log(res);
+            }else {
+                console.log('failed');
+            }
+        });
+
+        document.getElementById('sign-in-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const emailAddress = document.getElementById('input-email').value;
+            const password = document.getElementById('input-password').value;
+            signIn(emailAddress, password);
+        });
+
+        document.getElementById('silent-auth-btn').addEventListener('click', async () => {
+            const res = await fetch("https://huddleapi.com/users/silentAuth", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', 
+                    'Authorization': 'Bearer '+localStorage.getItem('access_token')
+                },
+                credentials: 'include',
+                mode: 'cors',
+                origin: "https://huddle.com"
+            });
+            if(res.ok) {
+                const data = await res.json();
+                localStorage.setItem('access_token', data.data.accessToken);
+                console.log(data.data);
+            }else {
+                console.log('failed');
+            }
+        })
+    </script>

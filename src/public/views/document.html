@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="/static/css/lib/theme/theme.css">
+        <link type="text/css" rel="stylesheet" href="/static/css/lib/grid/grid.css">
+        <link type="text/css" rel="stylesheet" href="/static/css/tempCSS/comment.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <title>Huddle</title>
+    </head>
+    <body>
+        <div style="display: flex; align-items: center; justify-content: center; display: none;" class="v-margin-t-64px">
+            <div class="bg-card f-poppins v-border-r-32px" style="padding: 2rem;">
+                <div class="f-comfortaa bg-color-orange v-border-r-100 t-color-white h-lg v-margin-b-16px" style="height: 4rem; width: 4rem; display: flex; align-items: center; justify-content: center;">hd</div>
+                <div class="h-ex-lg t-color-dark v-margin-b-8px">Failed to load scripts!</div>
+                <p class="t-md t-color-gray v-margin-b-8px">Something went wrong, but don’t fret — let’s give it another shot.</p>
+                <div class="t-md t-color-orange" style="display: flex; align-items: center; cursor: pointer;">Try again <div class="material-icons">refresh</div></div> 
+            </div>
+        </div>
+        
+        <noscript>
+            <div style="display: flex; align-items: center; justify-content: center;" class="v-margin-t-64px">
+                <div class="bg-card f-poppins v-border-r-32px" style="width: 50vw; padding: 2rem">
+                    <div class="f-comfortaa bg-color-orange v-border-r-100 t-color-white h-lg v-margin-b-16px" style="height: 4rem; width: 4rem; display: flex; align-items: center; justify-content: center;">hd</div>
+                    <div class="h-ex-lg t-color-dark v-margin-b-8px">JavaScript is not available.</div>
+                    <p class="t-md t-color-gray v-margin-b-8px">We’ve detected that JavaScript is disabled in this browser. Please enable JavaScript or switch to a supported browser to continue using twitter.com. You can see a list of supported browsers in our Landing Page.</p>
+                    <div><a href="#" class="t-md t-color-orange">Learn more</a></div>
+                </div>
+            </div>
+        </noscript>    
+        <script type="text/javascript" charset="utf-8"> 
+            (function(){
+                window.__LOADED_SCRIPTS__ = {};
+            })();
+        </script>
+        <script type="module" async charset="utf-8" src="/static/web-scripts/init.js" id="init-js"></script>
+        <script defer> 
+            (function(){
+                console.log(window.__LOADED_SCRIPTS__);
+            })();
+        </script>
+    </body>
+</html>

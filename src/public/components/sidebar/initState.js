@@ -1,3 +1,1 @@
-const iniState = { selectedSection: 'Home'};
-
-export default iniState;
+export default { currentSection: '/home', previousSection: null, currentSubSection: null };
