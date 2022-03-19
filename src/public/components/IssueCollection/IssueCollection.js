@@ -11,6 +11,7 @@ class IssueCollection extends Component
         this.props['issueList'] = [];
         this.props['lastDate'] = "";
         this.updateList = this.updateList.bind(this);
+        this.onCreate = this.onCreate.bind(this);
         this.render = this.render.bind(this);
     }
 
@@ -38,6 +39,11 @@ class IssueCollection extends Component
         }
 
         this.dispatch(IssueCardActions.selectIssue({id:0, data:this.props.issueList[0]}));
+    }
+
+    onCreate()
+    {
+        this.updateList();
     }
 
     render()

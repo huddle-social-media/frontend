@@ -18,6 +18,7 @@ class EventMap extends Component
         this.subscriber = this.subscriber.bind(this);
         this.closeOverlay = this.closeOverlay.bind(this);
         this.leaveCurrentEvent = this.leaveCurrentEvent.bind(this);
+        this.attendCurrentEvent = this.attendCurrentEvent.bind(this);
         this.closeAttendees = this.closeAttendees.bind(this);
         this.initMap = this.initMap.bind(this);
         this.renderMap = this.renderMap.bind(this);
@@ -87,8 +88,16 @@ class EventMap extends Component
 
                         htmlStr = htmlStr.concat(`</div></div>`);
                     }
+
+                    if(state.EventMap.selectedEvent.props.state == "attending")
+                    {
+                        htmlStr = htmlStr.concat(`<div class="v-margin-t-64px v-margin-b-16px v-border-r-24px t-md f-w-sb t-color-dark-gray btn" style="display: flex; justify-content: center; align-items: center; border: 2px solid #BBBBBB; height: 2rem; width: 4.5rem;" data-ref="${state.EventMap.selectedEvent.props.id}" onclick="window.${this.name}.leaveCurrentEvent(event)">Leave</div>`);
+                    }else
+                    {
+                        htmlStr = htmlStr.concat(`<div class="v-margin-t-64px v-margin-b-16px v-border-r-24px t-md f-w-sb t-color-white btn bg-color-orange" style="display: flex; justify-content: center; align-items: center; border: 2px solid #FE793D; height: 2rem; width: 4.5rem;" data-ref="${state.EventMap.selectedEvent.props.id}" onclick="window.${this.name}.attendCurrentEvent(event)">Attend</div>`);
+                    }
                                             
-                    htmlStr = htmlStr.concat(`<div class="v-margin-t-64px v-margin-b-16px v-border-r-24px t-md f-w-sb t-color-dark-gray btn" style="display: flex; justify-content: center; align-items: center; border: 2px solid #BBBBBB; height: 2rem; width: 4.5rem;" data-ref="${state.EventMap.selectedEvent.props.id}" onclick="window.${this.name}.leaveCurrentEvent(event)">Leave</div>
+                    htmlStr = htmlStr.concat(`
                     <div class="t-color-dark v-margin-b-32px" style="display: flex; column-gap: 0.5rem;">
                         <div class="h-ex-sm" style="display: flex; justify-content: center; align-items: center;">Hosted by</div>
                         <div style="display: flex; column-gap: 0.5rem;">
@@ -165,13 +174,27 @@ class EventMap extends Component
         }
     }
 
+    attendCurrentEvent(event)
+    {
+        event.stopPropagation();
+        window.EventCollection.props.eventList[event.currentTarget.getAttribute('data-ref')].props.state = "attending";
+        this.dispatch(EventCardActions.selectEvent({id: event.currentTarget.getAttribute("data-ref"), data:window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")]}))
+    }
+
 
     leaveCurrentEvent(event)
     {
         event.stopPropagation();
-        this.closeOverlay(event);
-        this.props.markerList[event.currentTarget.getAttribute('data-ref')].setMap(null);
-        this.dispatch(EventMapActions.leaveEvent(event.currentTarget.getAttribute('data-ref')));
+        if(this.props.subSection == "/attending")
+        {
+            this.closeOverlay(event);
+            this.props.markerList[event.currentTarget.getAttribute('data-ref')].setMap(null);
+            this.dispatch(EventMapActions.leaveEvent(event.currentTarget.getAttribute('data-ref')));
+        }else
+        {
+            window.EventCollection.props.eventList[event.currentTarget.getAttribute('data-ref')].props.state = "notAttending";
+        this.dispatch(EventCardActions.selectEvent({id: event.currentTarget.getAttribute("data-ref"), data:window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")]}))
+        }
     }
 
     closeOverlay(event)

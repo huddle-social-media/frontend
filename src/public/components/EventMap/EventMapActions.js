@@ -5,7 +5,8 @@ const EventMapActions = {
     openLeftSide: createAction(EventMapEvents.OPEN_LEFT_SIDE),
     closeLeftSide: createAction(EventMapEvents.CLOSE_LEFT_SIDE),
     closeRightSide: createAction(EventMapEvents.CLOSE_RIGHT_SIDE),
-    leaveEvent: createAction(EventMapEvents.LEAVE_EVENT)
+    leaveEvent: createAction(EventMapEvents.LEAVE_EVENT),
+    attendEvent: createAction(EventMapEvents.ATTEND_EVENT)
 };
 
 export default EventMapActions;

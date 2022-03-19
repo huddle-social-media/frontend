@@ -6,7 +6,7 @@ import middleNavReducer from "./MiddleNavReducer.js";
 class MiddleNav extends Component {
     constructor(props = {}) {
         super(props);
-        this.navs = { "/settings": [{href: "/account", name: "Account"}, {href: "/analytics", name: "Analytics"},  {href: "/privacy", name: "Privacy"}], "/explore": [{href: "/interest", name: "Interest"}, {href: "/global", name: "Global"}]};
+        this.navs = { "/settings": [{href: "/account", name: "Account"}, {href: "/analytics", name: "Analytics"},  {href: "/privacy", name: "Privacy"}], "/explore": [{href: "/interest", name: "Interest"}, {href: "/global", name: "Global"}], "/events": [{href:"/attending", name: "Attending"}, {href: "/onGoing", name: "On Going"}]};
         this.subscriber = this.subscriber.bind(this);
         this.render = this.render.bind(this);
         this.setSubscriber(this.name, this.subscriber);

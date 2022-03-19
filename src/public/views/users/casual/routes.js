@@ -29,9 +29,22 @@ const activateRoutes = () => {
     router.add('/issues', () => {
         store.dispatch(sidebarActions.selectASection( { section: '/issues'}));
     });
+
+    router.add('/events/attending', () => {
+        store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/attending'}));
+        store.dispatch(middleNavActions.selectASubSection('/events/attending'));
+    });
+
+    router.add('/events/onGoing', () => {
+        store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/onGoing'}));
+        store.dispatch(middleNavActions.selectASubSection('/events/onGoing'));
+    });
+    
     
     router.add('/events', () => {
-        store.dispatch(sidebarActions.selectASection( { section: '/events'}));
+        window.history.pushState("", "", '/events/attending');
+        store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/attending'}));
+        store.dispatch(middleNavActions.selectASubSection('/events/attending'));
     });
 
     /*router.add('/profile/:username', (params) => {
