@@ -1,1 +1,0 @@
-export default { currentSection: '/home', previousSection: null, currentSubSection: null };
