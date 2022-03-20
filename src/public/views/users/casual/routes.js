@@ -3,6 +3,7 @@ import store from "../../../lib/flux/store/index.js";
 import sidebarActions from "../../../components/Sidebar/SidebarActions.js";
 import middleNavActions from "../../../components/MiddleNav/MiddleNavActions.js";
 import postActions from "../../../components/Post/PostActions.js";
+import Router from "../../../lib/router/Router.js";
 
 
 const activateRoutes = () => {
@@ -26,13 +27,44 @@ const activateRoutes = () => {
         store.dispatch(middleNavActions.selectASubSection('/explore/interest'));
     });
     
-    router.add('/issues', () => {
-        store.dispatch(sidebarActions.selectASection( { section: '/issues'}));
+    router.add('/issues/accepted', () => {
+        store.dispatch(sidebarActions.selectASection({ section: '/issues', currentSubSection: '/issues/accepted'}));
+        store.dispatch(middleNavActions.selectASubSection('/issues/accepted'));
+        router.sectionHist['issues'] = "/issues/accepted";
     });
+
+    router.add('/issues/pending', () => {
+        store.dispatch(sidebarActions.selectASection({ section: '/issues', currentSubSection: '/issues/pending'}));
+        store.dispatch(middleNavActions.selectASubSection('/issues/pending'));
+        router.sectionHist['issues'] = "/issues/pending";
+
+    });
+    
+    
+    router.add('/issues', () => {
+        if(router.sectionHist['issues'])
+        {
+            window.history.pushState("", "", router.sectionHist['issues']);
+            store.dispatch(sidebarActions.selectASection({ section: '/issues', currentSubSection: router.sectionHist['issues']}));
+            store.dispatch(middleNavActions.selectASubSection(router.sectionHist['issues']));
+        }else
+        {
+            window.history.pushState("", "", '/issues/accepted');
+            store.dispatch(sidebarActions.selectASection({ section: '/issues', currentSubSection: '/issues/accepted'}));
+            store.dispatch(middleNavActions.selectASubSection('/issues/accepted'));
+            router.sectionHist['issues'] = "/issues/accepted";
+        }
+        
+            
+        
+        
+    });
+
 
     router.add('/events/attending', () => {
         store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/attending'}));
         store.dispatch(middleNavActions.selectASubSection('/events/attending'));
+
     });
 
     router.add('/events/onGoing', () => {
@@ -76,7 +108,7 @@ const activateRoutes = () => {
     router.add('/settings/analytics', () => {
         store.dispatch(sidebarActions.selectASection({ section: '/settings', currentSubSection: '/settings/analytics'}));
         store.dispatch(middleNavActions.selectASubSection('/settings/analytics'));
-    })
+    });
     
     router.add('/settings', () => {
         window.history.pushState("", "", '/settings/account');

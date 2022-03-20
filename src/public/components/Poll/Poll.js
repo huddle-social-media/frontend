@@ -89,7 +89,7 @@ class Poll extends Component {
     }
 
     onCreate() {
-        debugger
+        
         if((((new Date()).getTime() - (new Date(
             this.props.publishedTime.year,
             this.props.publishedTime.month,

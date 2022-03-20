@@ -101,7 +101,7 @@ const appInitializer = (username) => {
                     element = createComponent(eventCollection);
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[eventCollection.name] = eventCollection;
-                    //getAttendingEvents(); ################################################
+                    getAttendingEvents();
                     break;
                 }
 
@@ -116,6 +116,34 @@ const appInitializer = (username) => {
                     element = createComponent(eventCollection);
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[eventCollection.name] = eventCollection;
+                    break;
+                }
+
+                if(state['MiddleNav'].currentSubSection == "/issues/accepted")
+                {
+                    window.__MIDDLE_PANEL__.innerText = "";
+                    const issue = new Issue({subSection : "/accepted"});
+                    let element = createComponent(issue);
+                    window.__MIDDLE_PANEL__.appendChild(element);
+                    window[issue.name] = issue;
+                    const issueCollection = new IssueCollection({pending:[{title:"Need a Coach", date:"3rd of July 2021", interest:"Cricket"}, {title:"Looking for equipment", date:"3rd of July 2021", messages:[{type:"received", value: "Hi.. "}, {type:"received", value: "I might be able to help you here.. Can you send me more details about the problem"}], interest:"Basketball"}]});
+                    element = createComponent(issueCollection);
+                    window.__MIDDLE_PANEL__.appendChild(element);
+                    window[issueCollection.name] = issueCollection;
+                    break;
+                }
+
+                if(state['MiddleNav'].currentSubSection == "/issues/pending")
+                {
+                    window.__MIDDLE_PANEL__.innerText = "";
+                    const issue = new Issue({subSection : "/pending"});
+                    let element = createComponent(issue);
+                    window.__MIDDLE_PANEL__.appendChild(element);
+                    window[issue.name] = issue;
+                    const issueCollection = new IssueCollection({pending:[{title:"Need a Coach", date:"3rd of July 2021", interest:"Cricket"}, {title:"Looking for equipment", date:"3rd of July 2021", messages:[{type:"received", value: "Hi.. "}, {type:"received", value: "I might be able to help you here.. Can you send me more details about the problem"}], interest:"Basketball"}]});
+                    element = createComponent(issueCollection);
+                    window.__MIDDLE_PANEL__.appendChild(element);
+                    window[issueCollection.name] = issueCollection;
                     break;
                 }
             }

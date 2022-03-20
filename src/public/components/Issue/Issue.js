@@ -35,7 +35,7 @@ class Issue extends Component
                 this.refs.interest.innerHTML = state.Issue.selectedIssue.props.interest;
 
 
-                if(state.Issue.selectedIssue.props.messages)
+                if(state.Issue.selectedIssue.props.messages && this.props.subSection == "/accepted")
                 {
                     let htmlStr = ``;
                     htmlStr = htmlStr.concat(`<div class="bg-color-light-gray v-border-r-32px grid__collg12 grid__colmd12 grid__colsm12 v-margin-l-32px v-margin-r-32px v-margin-b-16px" style="height: 15.313rem; padding: 1rem 0rem 1rem 1rem;" id="message-section">
@@ -76,6 +76,11 @@ class Issue extends Component
             }
 
             case IssueEvents.SEND_MESSAGE:{
+                if(this.props.subSection != "/accepted")
+                {
+                    break;
+                }
+
                 let htmlStr = ``;
                 let msg = state.Issue.pendingMessage;
                 if(document.getElementById("message-section"))
@@ -114,6 +119,12 @@ class Issue extends Component
     sendMessage(event)
     {
         event.stopPropagation();
+
+        if(this.props.subSection != "/accepted")
+        {
+            return
+        }
+
         if(event.target.getAttribute("data-ref") == "messageField")
         {
             if(event.keyCode == 13 && event.target.value !== "")
@@ -160,17 +171,22 @@ class Issue extends Component
             htmlStr = htmlStr.concat(`</div>`);
         }
 
-        htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-gray bg-color-light-gray v-border-r-32px v-margin-l-32px v-margin-r-32px messages-input__area grid v-margin-b-32px" style="height: 4rem; padding: 1rem;">
-        <div class="grid__collg11">
-            <input class="issue__card-message-input f-poppins t-sm f-w-rg" type="text" placeholder="Type your response here" style="outline: none; border: none; background: transparent; width: 100%;" onkeypress="window.${this.name}.sendMessage(event)" data-ref="messageField">
-        </div>
-        <div class="grid__collg1" style="display: flex; align-items: center;">
-            <div class="material-icons v-margin-l-16px v-margin-r-8px">attach_file</div>
-            <div class="bg-color-orange btn t-color-white v-border-r-100 issue__message-send-btn" style="display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem;" data-ref="sendButton" onclick="window.${this.name}.sendMessage(event)">
-                <div class="material-icons">send</div>
+        if(this.props.subSection == "/accepted")
+        {
+            htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-gray bg-color-light-gray v-border-r-32px v-margin-l-32px v-margin-r-32px messages-input__area grid v-margin-b-32px" style="height: 4rem; padding: 1rem;">
+            <div class="grid__collg11">
+                <input class="issue__card-message-input f-poppins t-sm f-w-rg" type="text" placeholder="Type your response here" style="outline: none; border: none; background: transparent; width: 100%;" onkeypress="window.${this.name}.sendMessage(event)" data-ref="messageField">
             </div>
-        </div>
-    </div>
+            <div class="grid__collg1" style="display: flex; align-items: center;">
+                <div class="material-icons v-margin-l-16px v-margin-r-8px">attach_file</div>
+                <div class="bg-color-orange btn t-color-white v-border-r-100 issue__message-send-btn" style="display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem;" data-ref="sendButton" onclick="window.${this.name}.sendMessage(event)">
+                    <div class="material-icons">send</div>
+                </div>
+            </div>
+        </div>`);
+        }
+
+        htmlStr = htmlStr.concat(`
     <div class="grid__collg12 grid__colmd12 grid__colsm12 t-md t-color-gray v-margin-l-32px v-margin-r-32px v-margin-b-64px">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam fugiat asperiores nam voluptates libero possimus explicabo quo quibusdam vel quam!
     </div>

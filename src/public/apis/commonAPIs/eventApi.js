@@ -1,10 +1,12 @@
 const getAttendingEvents = async () => {
+    const tok = localStorage.getItem('access_token');
     const res = await fetch("https://huddleapi.com/events/attending_events", {
             method: "GET",
             mode: "cors",
             credentials: "include",         
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${tok}`
             }
     });
     console.log(res);
@@ -22,4 +24,4 @@ const getAttendingEvents = async () => {
     }
 }
 
-export { getAttendingEvents};
+export {getAttendingEvents};

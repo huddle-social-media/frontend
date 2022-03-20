@@ -57,7 +57,7 @@ const initializer = (userInfo) => {
                 }
                 
             }).catch(e => {
-                console.log('failed');
+                console.log("failed", e);
             });
             
         }

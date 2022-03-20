@@ -1,6 +1,7 @@
 class Router {
     constructor() {
         this.routes = {};
+        this.sectionHist = {};
         this.pageNotFound = this.pageNotFound.bind(this);
         this.add = this.add.bind(this);
         this.getParams = this.getParams.bind(this);
