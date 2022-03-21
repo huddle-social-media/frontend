@@ -1,15 +1,14 @@
 const getAttendingEvents = async () => {
-    const tok = localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
     const res = await fetch("https://huddleapi.com/events/attending_events", {
             method: "GET",
             mode: "cors",
             credentials: "include",         
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${tok}`
+                "Authorization": `Bearer ${token}`
             }
     });
-    console.log(res);
     const result = await res.json();
     
     if(res.ok) {
@@ -17,10 +16,7 @@ const getAttendingEvents = async () => {
         let resData = result.data
         console.log(resData);
     }else {
-        if(res.status == 401) {
-            promptMessage.innerText = result.messages[0];
-            promptBox.style.display = "block";
-        }
+        console.log("Error when retrieving attending events");
     }
 }
 

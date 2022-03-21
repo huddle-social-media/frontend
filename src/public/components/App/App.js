@@ -101,7 +101,7 @@ const appInitializer = (username) => {
                     element = createComponent(eventCollection);
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[eventCollection.name] = eventCollection;
-                    getAttendingEvents();
+                    //getAttendingEvents();
                     break;
                 }
 
