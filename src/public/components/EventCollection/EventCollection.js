@@ -22,12 +22,12 @@ class EventCollection extends Component
     {
         switch(action.type){
             case EventMapEvents.LEAVE_EVENT:{
-                let date = this.props.eventList[action.value].props.date;
+                let date = this.props.eventList[action.value].props.event_date;
                 this.props.eventList[action.value].props.state = "notAttending";
                 document.getElementById(`eventCard${action.value}`).remove();
                 let remove = true;
                 this.props.eventList.forEach(item => {
-                    if(item.props.date == date && item.props.state == "attending")
+                    if(item.props.event_date == date && item.props.state == "attending")
                     {
                         
                         remove = false
@@ -55,10 +55,11 @@ class EventCollection extends Component
                 this.props.eventList.push(tempEventCard);
                 window.EventMap.props.pending.push(tempEventCard);
                 let element = createComponent(tempEventCard);
-                if(item.date !== this.props.lastDate)
+                if(item.event_date !== this.props.lastDate)
                 {
-                    this.props.lastDate = item.date;
-                    eventColl.innerHTML += `<div class="grid__collg12 grid__colmd12 grid__colsm12 f-poppins t-color-gray f-w-rg t-md-sm v-margin-t-64px v-margin-b-32px v-margin-l-64px v-margin-r-64px" id="eventCardDate${item.date}">${item.date}</div>`;
+                    console.log(item.event_date);
+                    this.props.lastDate = item.event_date;
+                    eventColl.innerHTML += `<div class="grid__collg12 grid__colmd12 grid__colsm12 f-poppins t-color-gray f-w-rg t-md-sm v-margin-t-64px v-margin-b-32px v-margin-l-64px v-margin-r-64px" id="eventCardDate${item.event_date}">${item.event_date}</div>`;
                     
                 }
                 eventColl.appendChild(element);

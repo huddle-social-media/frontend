@@ -1,3 +1,4 @@
+import { attendEvent, leaveEvent } from "../../apis/commonAPIs/eventApi.js";
 import Component from "../../lib/flux/component/Component.js";
 import EventCardActions from "../EventCard/EventCardActions.js";
 import EventCardEvents from "../EventCard/EventCardEvents.js";
@@ -48,8 +49,8 @@ class EventMap extends Component
                             this.dispatch(EventMapActions.closeLeftSide());
                         }
                     }
-                    this.props.lng = state.EventMap.selectedEvent.props.locLng;
-                    this.props.lat = state.EventMap.selectedEvent.props.locLat;
+                    this.props.lng = state.EventMap.selectedEvent.props.loc_lng;
+                    this.props.lat = state.EventMap.selectedEvent.props.loc_lat;
                     this.updateMapCenter();
                     this.panMapLeft();
 
@@ -64,10 +65,10 @@ class EventMap extends Component
                                             </div>
                                             <div class="t-sm f-w-rg t-color-dark" style="display: flex; column-gap: 1rem;">
                                                 <div>SSC Ground</div>
-                                                <div>21st Nov 2021</div>
-                                                <div>2.30PM</div>
+                                                <div>${state.EventMap.selectedEvent.props.event_date}</div>
+                                                <div>${state.EventMap.selectedEvent.props.event_time}</div>
                                             </div>
-                                            <div class="v-margin-t-32px v-margin-b-32px t-md f-w-rg t-color-dark-gray" style="overflow: auto; max-height: 8rem;">This is the event description. This gonna be a semi large description where all the event based info includes. My name is Rajitha Kumara and I play a lot of cricket and I like to smoke weed. This is the event description. This gonna be a semi large description where all the event based info includes. My name is Rajitha Kumara and I play a lot of cricket and I like to smoke weed. This is the event description. This gonna be a semi large description where all the event based info includes. My name is Rajitha Kumara and I play a lot of cricket and I like to smoke weed.</div>`;
+                                            <div class="v-margin-t-32px v-margin-b-32px t-md f-w-rg t-color-dark-gray" style="overflow: auto; max-height: 8rem;">${state.EventMap.selectedEvent.props.description}</div>`;
                     if(state.EventMap.selectedEvent.props.attendingCelebs)
                     {
                         let len = state.EventMap.selectedEvent.props.attendingCelebs.length;
@@ -105,7 +106,7 @@ class EventMap extends Component
                             <div class="f-w-md t-ex-sm" style="display: flex; justify-content: center; align-items: center;">Dinujaya</div>
                         </div>
                         <div class="t-ex-sm f-w-rg t-color-dark" style="display: flex; justify-content: center; align-items: center; margin-left: auto;">
-                            <div>${state.EventMap.selectedEvent.props.goingCount}</div>
+                            <div>${state.EventMap.selectedEvent.props.going}</div>
                             <div>&nbspgoing</div>
                         </div>
                     </div>
@@ -177,6 +178,7 @@ class EventMap extends Component
     attendCurrentEvent(event)
     {
         event.stopPropagation();
+        attendEvent(window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.event_id);
         window.EventCollection.props.eventList[event.currentTarget.getAttribute('data-ref')].props.state = "attending";
         this.dispatch(EventCardActions.selectEvent({id: event.currentTarget.getAttribute("data-ref"), data:window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")]}))
     }
@@ -185,6 +187,8 @@ class EventMap extends Component
     leaveCurrentEvent(event)
     {
         event.stopPropagation();
+        console.log(window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.event_id);
+        leaveEvent(window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.event_id);
         if(this.props.subSection == "/attending")
         {
             this.closeOverlay(event);
@@ -251,7 +255,7 @@ class EventMap extends Component
     {
         this.props.pending.forEach(item => {
             let tempMarker = new google.maps.Marker({
-                position: {lat: item.props.locLat, lng: item.props.locLng},
+                position: {lat: item.props.loc_lat, lng: item.props.loc_lng},
                 map: this.props.map
             });
     

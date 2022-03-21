@@ -7,6 +7,7 @@ class EventCard extends Component
     constructor(props = {})
     {
         super(props);
+        console.log(this.props);
         this.clickCard = this.clickCard.bind(this);
         this.render = this.render.bind(this);
     }
@@ -35,7 +36,7 @@ class EventCard extends Component
                 <div class="grid__collg12 grid__colmd12 grid__colsm12 f-w-md t-lg-sm">${this.props.title}</div>
                 <div style="display: flex;"><span class="material-icons">more_horiz</span></div>
             </div>
-            <div class="f-w-sb t-ex-sm v-margin-t-16px">${this.props.goingCount} going</div>`;
+            <div class="f-w-sb t-ex-sm v-margin-t-16px">${this.props.going} going</div>`;
 
         if(this.props.attendingCelebs)
         {
@@ -59,8 +60,8 @@ class EventCard extends Component
             
         htmlStr = htmlStr.concat(`<div class="f-w-sb t-ex-sm v-margin-t-16px" style="display: flex; flex-direction: row; column-gap: 1rem;">
         <div>SSC grounds</div>
-        <div>21st Nov 2021</div>
-        <div>02.30pm</div>
+        <div>${this.props.event_date}</div>
+        <div>${this.props.event_time}</div>
     </div>
 </div>
 

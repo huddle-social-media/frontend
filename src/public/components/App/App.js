@@ -18,7 +18,7 @@ import sidebarActions from "../Sidebar/SidebarActions.js";
 
 
 import { getPost } from "../../apis/commonAPIs/postApi.js";
-import { getAttendingEvents } from "../../apis/commonAPIs/eventApi.js";
+import { getAllEvents, getAttendingEvents } from "../../apis/commonAPIs/eventApi.js";
 import popupsActions from "../Popups/PopupsActions.js";
 import middleNavEvents from "../MiddleNav/MiddleNavEvents.js";
 import middleNavActions from "../MiddleNav/MiddleNavActions.js";
@@ -97,11 +97,14 @@ const appInitializer = (username) => {
                     let element = createComponent(eventMap);
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[eventMap.name] = eventMap;
-                    const eventCollection = new EventCollection({pending:[{date:"5th of July 2007", title:"Cricket Match", state:"attending" ,locLng: 80.62416083730378 , locLat: 7.467086430424934, attendingCelebs:["John", "Sam", "Lisa", "Hendry"], goingCount: 300}, {date:"5th of July 2007", eventId:54645, title:"BigBASH", state:"notAttending", locLng: 80.71492317498907, locLat: 7.443015628832131, attendingCelebs:["John", "Sam",], goingCount: 600}]});
-                    element = createComponent(eventCollection);
-                    window.__MIDDLE_PANEL__.appendChild(element);
-                    window[eventCollection.name] = eventCollection;
-                    //getAttendingEvents();
+                    getAllEvents().then((data) => {
+                        const eventCollection = new EventCollection({pending : data});
+                        element = createComponent(eventCollection);
+                        window.__MIDDLE_PANEL__.appendChild(element);
+                        window[eventCollection.name] = eventCollection;
+                    });
+                    
+                    
                     break;
                 }
 
@@ -112,11 +115,16 @@ const appInitializer = (username) => {
                     let element = createComponent(eventMap);
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[eventMap.name] = eventMap;
-                    const eventCollection = new EventCollection({pending:[{date:"5th of July 2007", eventId:689, title:"Cricket Match", state:"attending" ,locLng: 80.62416083730378 , locLat: 7.467086430424934, attendingCelebs:["John", "Sam", "Lisa", "Hendry"], goingCount: 300}, {date:"5th of July 2007", eventId:54645, title:"BigBASH", state:"attending", locLng: 80.71492317498907, locLat: 7.443015628832131, attendingCelebs:["John", "Sam",], goingCount: 600}, {date:"5th of July 2009", eventId:998956, title:"Hackathon by UCSC", state:"attending", locLng: 79.86255628584033, locLat: 6.914168847549092, attendingCelebs:["John", "Sam", "Lisa", "Hendry", "Jacob"], goingCount: 1560}]});
-                    element = createComponent(eventCollection);
-                    window.__MIDDLE_PANEL__.appendChild(element);
-                    window[eventCollection.name] = eventCollection;
+                    getAttendingEvents().then((data) => {
+                        const eventCollection = new EventCollection({pending: data});
+                        element = createComponent(eventCollection);
+                        window.__MIDDLE_PANEL__.appendChild(element);
+                        window[eventCollection.name] = eventCollection;
+                        
+                    });
+
                     break;
+                    
                 }
 
                 if(state['MiddleNav'].currentSubSection == "/issues/accepted")
