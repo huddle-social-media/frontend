@@ -26,6 +26,7 @@ class Issue extends Component
                     break;
                 }
                 this.refs.issueTitle.innerHTML = state.Issue.selectedIssue.props.title;
+                this.refs.issueDescription.innerHTML = state.Issue.selectedIssue.props.description;
                 if(document.getElementById("message-section"))
                 {
                     let msgBox = document.getElementById("message-section");
@@ -150,7 +151,7 @@ class Issue extends Component
         let htmlStr = `
                     <div class="bg-card v-border-r-32px bg-color-white v-margin-l-32px v-margin-r-32px f-poppins grid grid__collg12 grid__colmd12 grid__colsm12" data-ref="issue">
                         <div class="grid v-margin-t-32px v-margin-l-32px v-margin-r-32px v-margin-b-32px grid__collg12 grid__colmd12 grid__colsm12" data-ref="topBar">
-                            <div class="t-color-dark h-md grid__collg11 grid__colmd11 grid__colsm11" data-ref="issueTitle">This is a sample issue about cricket</div>
+                            <div class="t-color-dark h-md grid__collg11 grid__colmd11 grid__colsm11" data-ref="issueTitle"></div>
                             <div class="t-color-gray t-sm f-w-rg grid__collg1 grid__colmd1 grid__colsm1" style="display: flex; align-items: center;">
                                 <div class="v-margin-r-16px" data-ref="interest"></div>
                                 <div><span class="material-icons">more_horiz</span></div>
@@ -187,10 +188,12 @@ class Issue extends Component
         }
 
         htmlStr = htmlStr.concat(`
-    <div class="grid__collg12 grid__colmd12 grid__colsm12 t-md t-color-gray v-margin-l-32px v-margin-r-32px v-margin-b-64px">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam fugiat asperiores nam voluptates libero possimus explicabo quo quibusdam vel quam!
-    </div>
-    <div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-dark v-margin-t-32px v-margin-l-32px v-margin-b-32px" style="display: flex; align-items: center;">
+    <div class="grid__collg12 grid__colmd12 grid__colsm12 t-md t-color-gray v-margin-l-32px v-margin-r-32px v-margin-b-64px" data-ref="issueDescription">
+        
+    </div>`);
+    if(this.props.subSection == "/accepted")
+    {
+        htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-dark v-margin-t-32px v-margin-l-32px v-margin-b-32px" style="display: flex; align-items: center;">
         <div class="t-md-sm f-w-md v-margin-r-8px">Accepted by</div>
         <div class="v-margin-r-8px">
             <img src="../../img/kamran-ch-BgTc5D1HoCc-unsplash.jpg" class="issue-accepted-by-propic v-border-r-100" style="width: 2.25rem; height: 2.25rem;">
@@ -199,8 +202,9 @@ class Issue extends Component
             Rajitha Kumara
         </div>
         
-    </div>
-</div>`);
+    </div>`);
+    }
+    htmlStr = htmlStr.concat(`</div>`);
 
     return htmlStr;
 

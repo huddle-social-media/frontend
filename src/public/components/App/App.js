@@ -22,6 +22,7 @@ import { getAllEvents, getAttendingEvents } from "../../apis/commonAPIs/eventApi
 import popupsActions from "../Popups/PopupsActions.js";
 import middleNavEvents from "../MiddleNav/MiddleNavEvents.js";
 import middleNavActions from "../MiddleNav/MiddleNavActions.js";
+import { getIssuesOnUser } from "../../apis/commonAPIs/issueApi.js";
 
 const appInitializer = (username) => {
     // populating event listenter for middle content for listenening to scrolling event 
@@ -116,7 +117,7 @@ const appInitializer = (username) => {
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[eventMap.name] = eventMap;
                     getAttendingEvents().then((data) => {
-                        const eventCollection = new EventCollection({pending: data});
+                        const eventCollection = new EventCollection({pending: data, subSection: "/attending"});
                         element = createComponent(eventCollection);
                         window.__MIDDLE_PANEL__.appendChild(element);
                         window[eventCollection.name] = eventCollection;
@@ -148,10 +149,13 @@ const appInitializer = (username) => {
                     let element = createComponent(issue);
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[issue.name] = issue;
-                    const issueCollection = new IssueCollection({pending:[{title:"Need a Coach", date:"3rd of July 2021", interest:"Cricket"}, {title:"Looking for equipment", date:"3rd of July 2021", messages:[{type:"received", value: "Hi.. "}, {type:"received", value: "I might be able to help you here.. Can you send me more details about the problem"}], interest:"Basketball"}]});
-                    element = createComponent(issueCollection);
-                    window.__MIDDLE_PANEL__.appendChild(element);
-                    window[issueCollection.name] = issueCollection;
+                    getIssuesOnUser().then((data)=>{
+                        const issueCollection = new IssueCollection({pending:data});
+                        element = createComponent(issueCollection);
+                        window.__MIDDLE_PANEL__.appendChild(element);
+                        window[issueCollection.name] = issueCollection;
+                    });
+                    
                     break;
                 }
             }

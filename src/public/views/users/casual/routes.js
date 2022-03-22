@@ -64,19 +64,41 @@ const activateRoutes = () => {
     router.add('/events/attending', () => {
         store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/attending'}));
         store.dispatch(middleNavActions.selectASubSection('/events/attending'));
+        router.sectionHist['events'] = "/events/attending";
 
     });
 
     router.add('/events/onGoing', () => {
         store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/onGoing'}));
         store.dispatch(middleNavActions.selectASubSection('/events/onGoing'));
+        router.sectionHist['events'] = "/events/onGoing";
     });
+
+    // ### FOR ORGANIZATIONS
+
+
+    router.add('/events/myEvents', () => {
+        store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/myEvents'}));
+        store.dispatch(middleNavActions.selectASubSection('/events/myEvents'));
+        router.sectionHist['events'] = "/events/myEvents";
+    });
+
+
     
     
     router.add('/events', () => {
-        window.history.pushState("", "", '/events/attending');
-        store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/attending'}));
-        store.dispatch(middleNavActions.selectASubSection('/events/attending'));
+        
+        if(router.sectionHist['events'])
+        {
+            window.history.pushState("", "", router.sectionHist['events']);
+            store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: router.sectionHist['events']}));
+            store.dispatch(middleNavActions.selectASubSection(router.sectionHist['events']));
+        }else
+        {
+            window.history.pushState("", "", '/events/attending');
+            store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/attending'}));
+            store.dispatch(middleNavActions.selectASubSection('/events/attending'));
+        }
     });
 
     /*router.add('/profile/:username', (params) => {

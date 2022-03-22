@@ -10,6 +10,7 @@ class EventCollection extends Component
         super(props);
         this.props['eventList'] = [];
         this.props['lastDate'] = "";
+        this.props.validEvents = 0;
         this.onCreate = this.onCreate.bind(this);
         this.subscriber = this.subscriber.bind(this);
         this.setSubscriber("EventCollection", this.subscriber);
@@ -48,6 +49,7 @@ class EventCollection extends Component
     {
         if(this.props.pending)
         {
+            this.validEvents += this.props.pending.length;
             const eventColl = this.refs.eventColl;
             this.props.pending.forEach(item => {
                 item['id'] = this.props.eventList.length;
@@ -69,23 +71,37 @@ class EventCollection extends Component
             
 
             this.props.pending = [];
+
+            return true
      
 
+        }else if(this.props.validEvents == 0 && this.props.subSection == "/attending")
+        {
+            window.__MIDDLE_PANEL__.innerHTML = "";
+            window.__MIDDLE_PANEL__.innerHTML = `<div class="bg-card h-md t-color-gray v-border-r-32px bg-color-white v-margin-l-32px v-margin-t-64px v-margin-r-32px f-poppins" style="align-items: center; padding: 2rem 0rem; text-align: center;" data-ref="issue">You are not attending any events currently.</div>`;
+
+            return false;
         }
+
+        return true;
     }
 
     onCreate()
     {
-        this.updateList();
-        navigator.geolocation.getCurrentPosition(position => {
-            window.EventMap.props.lat = parseFloat(position.coords.latitude);
-            window.EventMap.props.lng = parseFloat(position.coords.longitude);
-            window.EventMap.initMap();
-        },position => {
-            window.EventMap.props.lat = 6.901729583304742;
-            window.EventMap.props.lng = 79.86188072771691;
-            window.EventMap.initMap();
-        });
+        
+        if(this.updateList())
+        {
+            navigator.geolocation.getCurrentPosition(position => {
+                window.EventMap.props.lat = parseFloat(position.coords.latitude);
+                window.EventMap.props.lng = parseFloat(position.coords.longitude);
+                window.EventMap.initMap();
+            },position => {
+                window.EventMap.props.lat = 6.901729583304742;
+                window.EventMap.props.lng = 79.86188072771691;
+                window.EventMap.initMap();
+            });
+        }
+        
         
     }
 

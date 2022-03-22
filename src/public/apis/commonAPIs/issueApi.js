@@ -1,3 +1,22 @@
-const getIssues = async () => {
-    return {pending:[{title:"Need a Coach", date:"3rd of July 2021", interest:"Cricket"}, {title:"Looking for equipment", date:"3rd of July 2021", messages:[{type:"received", value: "Hi.. "}, {type:"received", value: "I might be able to help you here.. Can you send me more details about the problem"}], interest:"Basketball"}]}
+const getIssuesOnUser = async () => {
+    const token = localStorage.getItem('access_token');
+    const res = await fetch("https://huddleapi.com/issues/issues_on_user", {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",         
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+    });
+    const result = await res.json();
+
+    if(res.ok) {
+        let resData = result.data
+        return resData
+    }else {
+        console.log("Error when retrieving issues based on user");
+    }
 }
+
+export {getIssuesOnUser};

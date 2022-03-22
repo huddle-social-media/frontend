@@ -54,7 +54,7 @@ class EventMap extends Component
                     this.updateMapCenter();
                     this.panMapLeft();
 
-                    let htmlStr = `<div class="grid__collg6 grid__colmd6 grid__colsm12" style="position:absolute; left: 50%; z-index: 100; background-color: white; border-top-right-radius: 32px; border-bottom-right-radius: 32px; overflow: hidden; height: 100%; width:50%;" id="eventMapRightSide">
+                    let htmlStr = `<div class="grid__collg6 grid__colmd6 grid__colsm12" style="position:absolute; left: 50%; z-index: 100; background-color: rgba(255,255,255, 0.83); backdrop-filter: blur(5px); border-top-right-radius: 32px; border-bottom-right-radius: 32px; overflow: hidden; height: 100%; width:50%;" id="eventMapRightSide">
                                         <div class="v-margin-b-32px v-margin-t-32px v-margin-l-32px v-margin-r-32px">
                                             <div class="v-margin-b-16px t-color-dark t-lg f-w-md" style="display: flex; justify-content:space-between; ">
                                                 <div class="v-margin-r-16px">${state.EventMap.selectedEvent.props.title}</div>
@@ -73,9 +73,12 @@ class EventMap extends Component
                     {
                         let len = state.EventMap.selectedEvent.props.attendingCelebs.length;
 
-                        htmlStr = htmlStr.concat(`<div class="t-sm f-w-md">
-                        <div class="v-margin-b-8px">Attending Celebrities</div>
-                        <div style="display: flex; column-gap: 0.5rem;">`);
+                        if(len)
+                        {
+                            htmlStr = htmlStr.concat(`<div class="t-sm f-w-md">
+                            <div class="v-margin-b-8px">Attending Celebrities</div>
+                            <div style="display: flex; column-gap: 0.5rem;">`);
+                        }
                         
                         for(let i = 0; i < 3 && i < len; i++)
                         {
@@ -92,10 +95,10 @@ class EventMap extends Component
 
                     if(state.EventMap.selectedEvent.props.state == "attending")
                     {
-                        htmlStr = htmlStr.concat(`<div class="v-margin-t-64px v-margin-b-16px v-border-r-24px t-md f-w-sb t-color-dark-gray btn" style="display: flex; justify-content: center; align-items: center; border: 2px solid #BBBBBB; height: 2rem; width: 4.5rem;" data-ref="${state.EventMap.selectedEvent.props.id}" onclick="window.${this.name}.leaveCurrentEvent(event)">Leave</div>`);
+                        htmlStr = htmlStr.concat(`<div class="v-margin-t-32px v-margin-b-32px v-border-r-24px t-md f-w-sb t-color-dark-gray btn" style="display: flex; justify-content: center; align-items: center; border: 2px solid #BBBBBB; height: 2rem; width: 4.5rem;" data-ref="${state.EventMap.selectedEvent.props.id}" onclick="window.${this.name}.leaveCurrentEvent(event)">Leave</div>`);
                     }else
                     {
-                        htmlStr = htmlStr.concat(`<div class="v-margin-t-64px v-margin-b-16px v-border-r-24px t-md f-w-sb t-color-white btn bg-color-orange" style="display: flex; justify-content: center; align-items: center; border: 2px solid #FE793D; height: 2rem; width: 4.5rem;" data-ref="${state.EventMap.selectedEvent.props.id}" onclick="window.${this.name}.attendCurrentEvent(event)">Attend</div>`);
+                        htmlStr = htmlStr.concat(`<div class="v-margin-t-32px v-margin-b-32px v-border-r-24px t-md f-w-sb t-color-white btn bg-color-orange btn" style="display: flex; justify-content: center; align-items: center; border: 2px solid #FE793D; height: 2rem; width: 4.5rem;" data-ref="${state.EventMap.selectedEvent.props.id}" onclick="window.${this.name}.attendCurrentEvent(event)">Attend</div>`);
                     }
                                             
                     htmlStr = htmlStr.concat(`
@@ -126,7 +129,7 @@ class EventMap extends Component
                 if(state.EventMap.leftSide)
                 {
                     let htmlStr = `<div class="grid__collg6 grid__colmd6 grid__colsm6" style="position:absolute; z-index: 100; border-top-left-radius: 32px; border-bottom-left-radius: 32px; overflow: hidden; height: 100%; width: 50%;" id="eventMapLeftSide">
-                                        <div style="background-color: rgba(255,255,255,0.9); height: 100%; width: 100%;">
+                                        <div style="background-color: rgba(255,255,255,0.83); backdrop-filter: blur(5px); height: 100%; width: 100%;">
                                             <div class="v-margin-l-32px v-margin-r-32px v-margin-b-32px">
                                                 <div class="v-margin-b-32px t-color-dark t-lg f-w-md" style="padding-top: 2rem; display:flex; flex-direction:row; justify-content:space-between;">
                                                     <div>Attending Celebrities</div>
@@ -135,10 +138,17 @@ class EventMap extends Component
                     state.EventMap.selectedEvent.props.attendingCelebs.forEach(element => {
                         htmlStr = htmlStr.concat(`<div class="v-margin-b-8px" style="display: flex;">
                         <img src="https://source.unsplash.com/random/200x200?sig=${Math.floor(Math.random() * 100)}" class="small-pp v-border-r-100">
-                        <div class="t-md-sm f-poppins f-w-sb v-margin-l-16px t-color-dark" style="display: flex; justify-content: center; align-items: center;">
-                            ${element}
-                        </div>
-                    </div>`);
+                        <div class="t-md-sm f-poppins f-w-sb v-margin-l-16px t-color-dark" style="display: flex; justify-content: center; align-items: center;">`);
+                            if(element.type = "celebrity")
+                            {
+                                htmlStr = htmlStr.concat(`${element.first_name + " " + element.last_name} </div>
+                                </div>`);
+                            }else
+                            {
+                                htmlStr = htmlStr.concat(`${element.organization_name} </div>
+                                </div>`);
+                            }
+                        
                     });
                                                 
                     htmlStr = htmlStr.concat(`</div></div></div>`);
@@ -187,18 +197,20 @@ class EventMap extends Component
     leaveCurrentEvent(event)
     {
         event.stopPropagation();
-        console.log(window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.event_id);
-        leaveEvent(window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.event_id);
+        leaveEvent(window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.event_id).then();
         if(this.props.subSection == "/attending")
         {
             this.closeOverlay(event);
             this.props.markerList[event.currentTarget.getAttribute('data-ref')].setMap(null);
             this.dispatch(EventMapActions.leaveEvent(event.currentTarget.getAttribute('data-ref')));
+            window.EventCollection.props.validEvents -= 1;
+            window.EventCollection.updateList();
         }else
         {
             window.EventCollection.props.eventList[event.currentTarget.getAttribute('data-ref')].props.state = "notAttending";
-        this.dispatch(EventCardActions.selectEvent({id: event.currentTarget.getAttribute("data-ref"), data:window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")]}))
+            this.dispatch(EventCardActions.selectEvent({id: event.currentTarget.getAttribute("data-ref"), data:window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")]}))
         }
+        
     }
 
     closeOverlay(event)
