@@ -7,6 +7,7 @@ const sidebarLinks = {
     EXPLORE : { href: "/explore", icon: "explore", name: "Explore" },
     ISSUES : { href: "/issues", icon: "lightbulb", name: "Issues" },
     EVENTS : { href: "/events", icon: "event", name: "Events" },
+    ADVERTISEMENTS: { href: "/advertisements", icon: "flare", name: "Advertisements" },
     PROFILE : { href: "/profile", icon: "person", name: "Profile" },
     SETTINGS: { href: "/settings", icon: "settings", name: "Settings" }
 }

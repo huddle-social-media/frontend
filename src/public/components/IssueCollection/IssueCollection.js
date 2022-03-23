@@ -18,11 +18,13 @@ class IssueCollection extends Component
 
     updateList()
     {
+        
         if(this.props.pending)
         {
             const issueColl = this.refs.issueColl;
             this.props.pending.forEach(item => {
                 item['id'] = this.props.issueList.length;
+                item['subSection'] = this.props.subSection;
                 let tempIssueCard = new IssueCard(item);
                 this.props.issueList.push(tempIssueCard);
                 let element = createComponent(tempIssueCard);
@@ -35,7 +37,11 @@ class IssueCollection extends Component
                 issueColl.appendChild(element);
                 window[tempIssueCard.name] = tempIssueCard;
             });
+
+            this.validIssues += this.props.pending.length;
             this.props.pending = [];
+
+            
 
             this.dispatch(IssueCardActions.selectIssue({id:0, data:this.props.issueList[0]}));
 

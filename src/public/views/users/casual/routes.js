@@ -15,6 +15,7 @@ const activateRoutes = () => {
         store.dispatch(sidebarActions.selectASection({ section: '/explore', currentSubSection: '/explore/interest'}));
         store.dispatch(middleNavActions.selectASubSection('/explore/interest'));
     });
+    
 
     router.add('/explore/global', () => {
         store.dispatch(sidebarActions.selectASection({ section: '/explore', currentSubSection: '/explore/global'}));
@@ -25,6 +26,22 @@ const activateRoutes = () => {
         window.history.pushState("", "", '/explore/interest');
         store.dispatch(sidebarActions.selectASection({ section: '/explore', currentSubSection: '/explore/interest'}));
         store.dispatch(middleNavActions.selectASubSection('/explore/interest'));
+    });
+
+    router.add('/advertisements/active', () => {
+        store.dispatch(sidebarActions.selectASection({ section: '/advertisements', currentSubSection: '/advertisements/active'}));
+        store.dispatch(middleNavActions.selectASubSection('/advertisements/active'));
+    });
+
+    router.add('/advertisements/posted', () => {
+        store.dispatch(sidebarActions.selectASection({ section: '/advertisements', currentSubSection: '/advertisements/posted'}));
+        store.dispatch(middleNavActions.selectASubSection('/advertisements/posted'));
+    });
+
+    router.add('/advertisements', () => {
+        window.history.pushState("", "", '/advertisements/active');
+        store.dispatch(sidebarActions.selectASection({ section: '/advertisements', currentSubSection: '/advertisements/active'}));
+        store.dispatch(middleNavActions.selectASubSection('/advertisements/active'));
     });
     
     router.add('/issues/accepted', () => {

@@ -23,8 +23,22 @@ class IssueCard extends Component
     {
         let htmlStr = `
                         <div class="grid__collg4 grid__colmd6 grid__colsm6 btn issue-card bg-card bg-color-white v-border-r-32px f-poppins v-margin-b-32px v-margin-l-16px v-margin-r-16px" onclick="window.${this.name}.clickCard(event)" data-ref="${this.props.id}">
-                            <div class="grid__collg12 grid__colmd12 grid__colsm12 v-margin-t-32px v-margin-l-32px v-margin-r-32px v-margin-b-32px f-w-md t-lg-sm">${this.props.title}</div>
-                            <div class="grid__collg12 grid__colmd12 grid__colsm12 tag-resolved v-margin-l-32px v-border-r-24px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; width: 5.125rem; height: 2.154375rem; background-color: #08AA82;">Resolved</div>
+                            <div class="grid__collg12 grid__colmd12 grid__colsm12 v-margin-t-32px v-margin-l-32px v-margin-r-32px v-margin-b-32px f-w-md t-lg-sm">${this.props.title}</div>`;
+            if(this.props.subSection == '/accepted')
+            {
+                if(this.props.unReadMessages)
+                {
+                    htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 bg-color-orange v-margin-l-32px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; border-radius:100%; width: 2.5rem; height: 2.5rem;">${this.props.unReadMessages.length}</div>`);
+                }else if(this.props.state == "closed")
+                {
+                    htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 tag-resolved v-margin-l-32px v-border-r-24px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; width: 5.125rem; height: 2.154375rem; background-color: #08AA82;">Resolved</div>`);
+                }else
+                {
+                    htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 tag-resolved v-margin-l-32px v-border-r-24px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; width: 5.125rem; height: 2.154375rem; background-color: #08AA82;"></div>`);
+                }
+            }
+
+            htmlStr = htmlStr.concat(`
                             <div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-dark v-margin-t-32px v-margin-l-32px v-margin-b-32px" style="display: flex; align-items: center;">
                                 <div class="t-md-sm f-w-md v-margin-r-8px">Accepted by</div>
                                 <div class="v-margin-r-8px">
@@ -35,7 +49,7 @@ class IssueCard extends Component
                                 </div>
                                 
                             </div>
-                        </div>`;
+                        </div>`);
 
         return htmlStr;
     }

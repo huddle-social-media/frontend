@@ -15,6 +15,7 @@ class Issue extends Component
         this.setReducer("Issue", IssueReducer);
         this.setSubscriber("Issue", this.subscriber);
         this.render = this.render.bind(this);
+        this.props.lastDate = "";
     }
 
     subscriber(state, action)
@@ -35,38 +36,71 @@ class Issue extends Component
 
                 this.refs.interest.innerHTML = state.Issue.selectedIssue.props.interest;
 
-
-                if(state.Issue.selectedIssue.props.messages && this.props.subSection == "/accepted")
+                if(state.Issue.selectedIssue.props.messages && this.props.subSection == "/accepted" && state.Issue.selectedIssue.props.chat_status == 'open' && state.Issue.selectedIssue.props.state == 'open')
                 {
                     let htmlStr = ``;
                     htmlStr = htmlStr.concat(`<div class="bg-color-light-gray v-border-r-32px grid__collg12 grid__colmd12 grid__colsm12 v-margin-l-32px v-margin-r-32px v-margin-b-16px" style="height: 15.313rem; padding: 1rem 0rem 1rem 1rem;" id="message-section">
                                                 <div style="display: flex; flex-direction: column; height:100%; overflow:overlay; margin-right:2rem;" id="message-box">
                     <!-- We inject messages here -->`);
                     state.Issue.selectedIssue.props.messages.forEach(message => {
-                        if(message.type == "received")
+                        if(message.message_date != this.props.lastDate)
+                        {
+                            this.props.lastDate = message.message_date;
+                            htmlStr = htmlStr.concat(`<div class="f-w-rg t-ex-sm" style="align-self: center;">${message.message_date}</div>`);
+                        }
+                        if(!(message.user_id == state.Issue.selectedIssue.props.me))
                         {
                             htmlStr = htmlStr.concat(`<div class="v-margin-l-16px v-margin-b-16px v-margin-r-16px v-margin-t-16px" style="max-width:45%;">
                             <div class="v-border-r-36px f-w-rg t-sm t-color-dark" style="padding: 1.25rem 1.5rem; background-color: #E4E4E4; border-bottom-left-radius: 0; width: fit-content;">
-                                ${message.value}
+                                ${message.message}
                             </div>
-                            <div class="f-w-rg t-ex-sm t-color-gray" style="margin-top: 0.25rem;">10.23pm</div>
+                            <div class="f-w-rg t-ex-sm t-color-gray" style="margin-top: 0.25rem;">${message.message_time}</div>
                         </div>`);
                         }else
                         {
                             htmlStr = htmlStr.concat(`<div class="v-margin-b-16px v-margin-r-16px v-margin-t-16px" style="display: flex; flex-direction: column; align-self: flex-end; max-width:45%;">
                             <div class="v-border-r-36px f-w-rg t-sm t-color-white bg-color-orange" style="padding: 1.25rem 1.5rem; border-bottom-right-radius: 0; width: fit-content;">
-                            ${message.value}
+                            ${message.message}
                             </div>
-                            <div class="f-w-rg t-ex-sm t-color-gray" style="margin-top: 0.25rem; align-self: flex-end;">10.23pm</div>
+                            <div class="f-w-rg t-ex-sm t-color-gray" style="margin-top: 0.25rem; align-self: flex-end;">${message.message_time}</div>
                         </div>`);
                         }
                         
                     });
+
+                    if(state.Issue.selectedIssue.props.unReadMessages)
+                    {
+                        state.Issue.selectedIssue.props.unReadMessages.forEach(message => {
+                            if(message.message_date != this.props.lastDate)
+                            {
+                                this.props.lastDate = message.message_date;
+                                htmlStr = htmlStr.concat(`<div class="f-w-rg t-ex-sm" style="align-self: center;">${message.message_date}</div>`);
+                            }
+                            
+                            
+                            htmlStr = htmlStr.concat(`<div class="v-margin-l-16px v-margin-b-16px v-margin-r-16px v-margin-t-16px" style="max-width:45%;">
+                            <div class="v-border-r-36px f-w-rg t-sm t-color-dark" style="padding: 1.25rem 1.5rem; background-color: #E4E4E4; border-bottom-left-radius: 0; width: fit-content;">
+                                ${message.message}
+                            </div>
+                            <div class="f-w-rg t-ex-sm t-color-gray" style="margin-top: 0.25rem;">${message.message_time}</div>
+                        </div>`);
+                            
+                            
+                        });
+                    }
+
                     htmlStr = htmlStr.concat(`</div></div>`);
                     this.refs.topBar.insertAdjacentHTML('afterend',htmlStr);
 
                     let msgBox = document.getElementById("message-box");
                     msgBox.scrollTop = msgBox.scrollHeight;
+                }else if(!(state.Issue.selectedIssue.props.chat_status == 'open' && state.Issue.selectedIssue.props.state == 'open'))
+                {
+                    if(this.refs.issueMessageInput)
+                    {
+                        this.refs.issueMessageInput.remove();
+                    }
+                    
                 }
 
                 
@@ -157,9 +191,9 @@ class Issue extends Component
                                 <div><span class="material-icons">more_horiz</span></div>
                             </div>
                         </div>`;
-        if(this.props.messages)
+        if(this.props.messages && this.props.subSection == "/accepted")
         {
-            htmlStr = htmlStr.concat(`<div class="bg-color-light-gray v-border-r-32px v-margin-l-32px v-margin-r-32px v-margin-b-16px" style="height: 15.313rem;">
+            htmlStr = htmlStr.concat(`<div class="bg-color-light-gray v-border-r-32px v-margin-l-32px v-margin-r-32px v-margin-b-16px" style="height: 15.313rem;" data-ref="issue_message_box">
             <!-- We inject messages here -->`);
             this.props.messages.forEach(message => {
                 htmlStr = htmlStr.concat(`<div class="v-margin-l-16px v-margin-b-16px v-margin-r-16px v-margin-t-16px">
@@ -174,7 +208,7 @@ class Issue extends Component
 
         if(this.props.subSection == "/accepted")
         {
-            htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-gray bg-color-light-gray v-border-r-32px v-margin-l-32px v-margin-r-32px messages-input__area grid v-margin-b-32px" style="height: 4rem; padding: 1rem;">
+            htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-gray bg-color-light-gray v-border-r-32px v-margin-l-32px v-margin-r-32px messages-input__area grid v-margin-b-32px" data-ref="issueMessageInput" style="height: 4rem; padding: 1rem;">
             <div class="grid__collg11">
                 <input class="issue__card-message-input f-poppins t-sm f-w-rg" type="text" placeholder="Type your response here" style="outline: none; border: none; background: transparent; width: 100%;" onkeypress="window.${this.name}.sendMessage(event)" data-ref="messageField">
             </div>
@@ -191,7 +225,7 @@ class Issue extends Component
     <div class="grid__collg12 grid__colmd12 grid__colsm12 t-md t-color-gray v-margin-l-32px v-margin-r-32px v-margin-b-64px" data-ref="issueDescription">
         
     </div>`);
-    if(this.props.subSection == "/accepted")
+    if(this.props.subSection == "/accepted") //Only in Casual User's App
     {
         htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-dark v-margin-t-32px v-margin-l-32px v-margin-b-32px" style="display: flex; align-items: center;">
         <div class="t-md-sm f-w-md v-margin-r-8px">Accepted by</div>

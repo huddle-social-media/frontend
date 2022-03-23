@@ -49,7 +49,6 @@ class EventCollection extends Component
     {
         if(this.props.pending)
         {
-            this.validEvents += this.props.pending.length;
             const eventColl = this.refs.eventColl;
             this.props.pending.forEach(item => {
                 item['id'] = this.props.eventList.length;
@@ -67,6 +66,8 @@ class EventCollection extends Component
                 eventColl.appendChild(element);
                 window[tempEventCard.name] = tempEventCard;
             });
+
+            this.validEvents += this.props.pending.length;
 
             
 

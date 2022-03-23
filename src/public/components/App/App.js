@@ -6,6 +6,7 @@ import EventCollection from "../../components/EventCollection/EventCollection.js
 
 import store from "../../lib/flux/store/index.js";
 import Issue from "../../components/Issue/Issue.js"
+import AdCard from "../../components/AdCard/AdCard"
 import IssueCard from "../../components/IssueCard/IssueCard.js"
 import IssueCollection from "../../components/IssueCollection/IssueCollection.js"
 import createComponent from "../../lib/flux/createComponent/createComponent.js";
@@ -22,7 +23,8 @@ import { getAllEvents, getAttendingEvents } from "../../apis/commonAPIs/eventApi
 import popupsActions from "../Popups/PopupsActions.js";
 import middleNavEvents from "../MiddleNav/MiddleNavEvents.js";
 import middleNavActions from "../MiddleNav/MiddleNavActions.js";
-import { getIssuesOnUser } from "../../apis/commonAPIs/issueApi.js";
+import { getIssuesAcceptedByUser, getIssuesOnUser } from "../../apis/commonAPIs/issueApi.js";
+import AdCollection from "../AdCollection/AdCollection.js";
 
 const appInitializer = (username) => {
     // populating event listenter for middle content for listenening to scrolling event 
@@ -37,20 +39,7 @@ const appInitializer = (username) => {
     const subscriber = (state, action) => {
         switch(action.type) {
             case sidebarEvents.SELECT_A_SECTION: {
-                if(state["Sidebar"].currentSection === "/issues") {
-                    window.__MIDDLE_PANEL__.innerText = '';
-                    const issue = new Issue();
-                    let element = createComponent(issue);
-                    window.__MIDDLE_PANEL__.appendChild(element);
-                    window[issue.name] = issue;
-
-                    const issueCollection = new IssueCollection({pending:[{title:"Need a Coach", date:"3rd of July 2021", interest:"Cricket"}, {title:"Looking for equipment", date:"3rd of July 2021", messages:[{type:"received", value: "Hi.. "}, {type:"received", value: "I might be able to help you here.. Can you send me more details about the problem"}], interest:"Basketball"}]});
-                    element = createComponent(issueCollection);
-                    window.__MIDDLE_PANEL__.appendChild(element);
-                    window[issueCollection.name] = issueCollection;
-                    issueCollection.props.pending.push({title:"Lack of funds from the government", date:"4th of July 2021", interest:"Baseball"});
-                    issueCollection.updateList();
-                }
+                
                 if(state["Sidebar"].currentSection === "/profile") {
                     window.__MIDDLE_PANEL__.innerText = '';
                     const profile = new Profile({ propic: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, name: "Rajitha Kumara", username: "rajitha_kumara", bio: "this is a sample bio about rajitha kumara", interest: "Cricket", location: "Gampaha", type: "casual", owner: false, following: true, autoGraphVisibility: true, signature: "Osura De Silva", signedUserPropic: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, signedUser: "Osura Silva"});
@@ -135,10 +124,13 @@ const appInitializer = (username) => {
                     let element = createComponent(issue);
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[issue.name] = issue;
-                    const issueCollection = new IssueCollection({pending:[{title:"Need a Coach", date:"3rd of July 2021", interest:"Cricket"}, {title:"Looking for equipment", date:"3rd of July 2021", messages:[{type:"received", value: "Hi.. "}, {type:"received", value: "I might be able to help you here.. Can you send me more details about the problem"}], interest:"Basketball"}]});
+                    getIssuesAcceptedByUser().then((data)=>{
+                        const issueCollection = new IssueCollection({pending:data, subSection:"/accepted"});
                     element = createComponent(issueCollection);
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[issueCollection.name] = issueCollection;
+                    });
+                    
                     break;
                 }
 
@@ -150,11 +142,41 @@ const appInitializer = (username) => {
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[issue.name] = issue;
                     getIssuesOnUser().then((data)=>{
-                        const issueCollection = new IssueCollection({pending:data});
+                        const issueCollection = new IssueCollection({pending:data, subSection:"/pending"});
                         element = createComponent(issueCollection);
                         window.__MIDDLE_PANEL__.appendChild(element);
                         window[issueCollection.name] = issueCollection;
                     });
+                    
+                    break;
+                }
+
+                if(state['MiddleNav'].currentSubSection == "/advertisements/active")
+                {
+                    window.__MIDDLE_PANEL__.innerText = "";
+
+                    const adCollection = new AdCollection({subSection: "/active",pending: [{"Hello":"Hi"}]});
+                    console.log(adCollection);
+                    let element = createComponent(adCollection);
+                    console.log(element);
+                    window.__MIDDLE_PANEL__.appendChild(element);
+                    window[adCollection.name] = adCollection;
+
+                    
+                    break;
+                }
+
+                if(state['MiddleNav'].currentSubSection == "/advertisements/posted")
+                {
+                    window.__MIDDLE_PANEL__.innerText = "";
+
+                    const adCollection = new AdCollection({subSection: "/active", pending: [{"ad_date":"2022-03-11"}]});
+                    console.log(adCollection);
+                    let element = createComponent(adCollection);
+                    console.log(element);
+                    window.__MIDDLE_PANEL__.appendChild(element);
+                    window[adCollection.name] = adCollection;
+
                     
                     break;
                 }
