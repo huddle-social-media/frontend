@@ -23,8 +23,11 @@ import { getAllEvents, getAttendingEvents } from "../../apis/commonAPIs/eventApi
 import popupsActions from "../Popups/PopupsActions.js";
 import middleNavEvents from "../MiddleNav/MiddleNavEvents.js";
 import middleNavActions from "../MiddleNav/MiddleNavActions.js";
-import { getIssuesAcceptedByUser, getIssuesOnUser } from "../../apis/commonAPIs/issueApi.js";
+import { getIssuesAcceptedByUser, getIssuesOnUser, updateIssueChat } from "../../apis/commonAPIs/issueApi.js";
 import AdCollection from "../AdCollection/AdCollection.js";
+import EventCardEvents from "../EventCard/EventCardEvents.js";
+import IssueCreatePopup from "../IssueCreatePopup/IssueCreatePopup.js";
+import EventCreatePopup from "../EventCreatePopup/EventCreatePopup.js";
 
 const appInitializer = (username) => {
     // populating event listenter for middle content for listenening to scrolling event 
@@ -37,6 +40,7 @@ const appInitializer = (username) => {
     });
 
     const subscriber = (state, action) => {
+        
         switch(action.type) {
             case sidebarEvents.SELECT_A_SECTION: {
                 
@@ -79,7 +83,25 @@ const appInitializer = (username) => {
                 break;
             }
 
+            case EventCardEvents.RENDER_EXPAND_VIEW:{
+                const popup = new EventCreatePopup('hello', {});
+                let element = createComponent(popup);
+                window[popup.name] = popup;
+
+                const popups = new Popups();
+                popups.setChildComponents("popupWindow", popup);
+                element = createComponent(popups);
+                document.body.appendChild(element);
+                window.Popups = popups;
+                window.history.pushState("", "", `https://huddle.com/events/createEvent`);
+                break;
+            }
+
             case middleNavEvents.SELECT_A_SUB_SECTION:{
+                if(window.intFunc != null)
+                {
+                    clearInterval(intFunc);
+                }
                 if(state['MiddleNav'].currentSubSection == "/events/onGoing")
                 {
                     window.__MIDDLE_PANEL__.innerText = '';
@@ -130,6 +152,8 @@ const appInitializer = (username) => {
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[issueCollection.name] = issueCollection;
                     });
+
+                    updateIssueChat();
                     
                     break;
                 }

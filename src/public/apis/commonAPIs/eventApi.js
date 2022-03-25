@@ -54,10 +54,8 @@ const leaveEvent = async (eventId) => {
                 event_id: parseInt(eventId)
               })
     });
-    const result = await res.json();
-    if(res.ok) {
-        let resData = result.data
-        return resData
+    if(res.ok) {  
+        return true;
     }else {
         console.log("Error when leaving event");
     }
@@ -77,13 +75,42 @@ const attendEvent = async (eventId) => {
                 event_id: parseInt(eventId)
               })
     });
-    const result = await res.json();
     if(res.ok) {
-        let resData = result.data
-        return resData
+        return true;
     }else {
         console.log("Error when attending event");
     }
 }
 
-export {getAllEvents, getAttendingEvents, leaveEvent, attendEvent};
+const createEvent = async (title, description, interest, loc_lat, loc_lng, eventDate, eventTime ) => {
+    const token = localStorage.getItem('access_token');
+    const res = await fetch("https://huddleapi.com/issues/create_event", {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",         
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                title: title,
+                description:description,
+                interest: interest,
+                loc_lat:loc_lat,
+                loc_lng:loc_lng,
+                eventDate: eventDate,
+                eventTime:eventTime
+              })
+    });
+    const result = await res.json();
+    console.log(result);
+    
+    if(res.ok) {
+        let resData = result.data
+        return resData;
+    }else {
+        console.log("Error when creating event");
+    }
+}
+
+export {getAllEvents, getAttendingEvents, leaveEvent, attendEvent, createEvent};

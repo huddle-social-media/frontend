@@ -189,15 +189,25 @@ class EventMap extends Component
     {
         event.stopPropagation();
         attendEvent(window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.event_id);
+
+        window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.going += 1;
+
+        window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].refs.going.innerHTML = `${window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.going} going`;
+        
         window.EventCollection.props.eventList[event.currentTarget.getAttribute('data-ref')].props.state = "attending";
         this.dispatch(EventCardActions.selectEvent({id: event.currentTarget.getAttribute("data-ref"), data:window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")]}))
+        
+        
     }
 
 
     leaveCurrentEvent(event)
     {
         event.stopPropagation();
-        leaveEvent(window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.event_id).then();
+        leaveEvent(window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.event_id);
+
+        
+        
         if(this.props.subSection == "/attending")
         {
             this.closeOverlay(event);
@@ -207,6 +217,9 @@ class EventMap extends Component
             window.EventCollection.updateList();
         }else
         {
+            window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.going -= 1;
+
+            window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].refs.going.innerHTML = `${window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")].props.going} going`;
             window.EventCollection.props.eventList[event.currentTarget.getAttribute('data-ref')].props.state = "notAttending";
             this.dispatch(EventCardActions.selectEvent({id: event.currentTarget.getAttribute("data-ref"), data:window.EventCollection.props.eventList[event.currentTarget.getAttribute("data-ref")]}))
         }

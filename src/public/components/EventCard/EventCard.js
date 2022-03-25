@@ -27,16 +27,22 @@ class EventCard extends Component
         document.getElementById("middle-panel").scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    expand(event)
+    {
+        event.stopPropagation();
+        this.dispatch(EventCardActions.renderExpandView());
+    }
+
 
     render()
     {
-        let htmlStr = `<div class="grid__collg4 grid__colmd6 grid__colsm12 issue-card bg-card bg-color-white v-border-r-32px f-poppins btn v-margin-b-32px v-margin-l-16px v-margin-r-16px" style="height: 20rem;" onclick=window.${this.name}.clickCard(event) data-ref=${this.props.id} id="eventCard${this.props.id}">
+        let htmlStr = `<div class="grid__collg4 grid__colmd6 grid__colsm12 issue-card bg-card bg-color-white v-border-r-32px f-poppins btn v-margin-b-32px v-margin-l-16px v-margin-r-16px" style="height: 20rem;"  data-ref=${this.props.id} id="eventCard${this.props.id}">
         <div class="v-margin-t-32px v-margin-l-32px v-margin-r-32px">
             <div style="display: flex; flex-direction: row; justify-content: space-between;">
                 <div class="grid__collg12 grid__colmd12 grid__colsm12 f-w-md t-lg-sm">${this.props.title}</div>
                 <div style="display: flex;"><span class="material-icons">more_horiz</span></div>
             </div>
-            <div class="f-w-sb t-ex-sm v-margin-t-16px">${this.props.going} going</div>`;
+            <div class="f-w-sb t-ex-sm v-margin-t-16px" data-ref="going">${this.props.going} going</div>`;
 
         if(this.props.attendingCelebs)
         {
@@ -70,7 +76,7 @@ class EventCard extends Component
     <div class="v-margin-r-8px">
         <img src="https://source.unsplash.com/random/200x200?sig=${Math.floor(Math.random() * 100)}" class="small-pp v-border-r-100">
     </div>
-    <div class="t-ex-sm f-w-md">
+    <div class="t-ex-sm f-w-md" onClick="window.${this.name}.expand(event)">
         Rajitha Kumara
     </div>
     

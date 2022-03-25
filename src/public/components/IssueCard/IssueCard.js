@@ -23,18 +23,19 @@ class IssueCard extends Component
     {
         let htmlStr = `
                         <div class="grid__collg4 grid__colmd6 grid__colsm6 btn issue-card bg-card bg-color-white v-border-r-32px f-poppins v-margin-b-32px v-margin-l-16px v-margin-r-16px" onclick="window.${this.name}.clickCard(event)" data-ref="${this.props.id}">
-                            <div class="grid__collg12 grid__colmd12 grid__colsm12 v-margin-t-32px v-margin-l-32px v-margin-r-32px v-margin-b-32px f-w-md t-lg-sm">${this.props.title}</div>`;
+                            <div class="grid__collg12 grid__colmd12 grid__colsm12 v-margin-t-32px v-margin-l-32px v-margin-r-32px v-margin-b-32px f-w-md t-lg-sm" data-ref="title">${this.props.title}</div>`;
             if(this.props.subSection == '/accepted')
             {
-                if(this.props.unReadMessages)
+                
+                if(this.props.unReadMessages.length != 0)
                 {
-                    htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 bg-color-orange v-margin-l-32px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; border-radius:100%; width: 2.5rem; height: 2.5rem;">${this.props.unReadMessages.length}</div>`);
+                    htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 bg-color-orange v-margin-l-32px t-color-white f-w-rg t-rg" style="display: flex; justify-content: center; align-items: center; border-radius:100%; width: 2.5rem; height: 2.5rem;" data-ref="tagOne" id="tagOne${this.props.id}">${this.props.unReadMessages.length}</div>`);
                 }else if(this.props.state == "closed")
                 {
-                    htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 tag-resolved v-margin-l-32px v-border-r-24px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; width: 5.125rem; height: 2.154375rem; background-color: #08AA82;">Resolved</div>`);
+                    htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 tag-resolved v-margin-l-32px v-border-r-24px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; width: 5.125rem; height: 2.154375rem; background-color: #08AA82;" data-ref="tagTwo${this.props.id}" id="tagTwo">Resolved</div>`);
                 }else
                 {
-                    htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 tag-resolved v-margin-l-32px v-border-r-24px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; width: 5.125rem; height: 2.154375rem; background-color: #08AA82;"></div>`);
+                    htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 tag-resolved v-margin-l-32px v-border-r-24px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; background-color: #08AA82;" data-ref="tagThree" id="tagThree${this.props.id}"></div>`);
                 }
             }
 

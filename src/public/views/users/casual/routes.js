@@ -4,6 +4,7 @@ import sidebarActions from "../../../components/Sidebar/SidebarActions.js";
 import middleNavActions from "../../../components/MiddleNav/MiddleNavActions.js";
 import postActions from "../../../components/Post/PostActions.js";
 import Router from "../../../lib/router/Router.js";
+import EventCardActions from "../../../components/EventCard/EventCardActions.js";
 
 
 const activateRoutes = () => {
@@ -100,7 +101,9 @@ const activateRoutes = () => {
         router.sectionHist['events'] = "/events/myEvents";
     });
 
-
+    router.add('/events/createEvent', ()=>{
+        store.dispatch(EventCardActions.renderExpandView());
+    });
     
     
     router.add('/events', () => {
@@ -115,6 +118,7 @@ const activateRoutes = () => {
             window.history.pushState("", "", '/events/attending');
             store.dispatch(sidebarActions.selectASection({ section: '/events', currentSubSection: '/events/attending'}));
             store.dispatch(middleNavActions.selectASubSection('/events/attending'));
+            router.sectionHist['events'] = "/events/attending";
         }
     });
 
