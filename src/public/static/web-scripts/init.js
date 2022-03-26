@@ -27,8 +27,9 @@ const sessionChek = async () => {
     });
     if(res.ok) {
         const result = await res.json();
+        const user = parseJwt(result.data.accessToken);
         localStorage.setItem('access_token', result.data.accessToken);
-        loadMain(result.data);
+        loadMain(user);
     }else {
         loadSignIn();
     }
@@ -52,7 +53,7 @@ const loadMain = (userInfo) => {
                     <div class="indicator bg-color-orange v-border-r-100" style="position: absolute;"></div>
                 </div>
                 <div class="v-margin-r-16px" style="position: relative;">
-                    <div><span class="material-icons">chat</span></div>
+                    <div id="chatBtn"><span class="material-icons">chat</span></div>
                     <div class="indicator bg-color-orange v-border-r-100" style="position:absolute"></div>
                 </div>
             </div>
@@ -155,8 +156,9 @@ const loadSignIn = async () => {
         });
         const result = await res.json();
         if(res.ok) {
+            const user = parseJwt(result.data.accessToken);
             localStorage.setItem('access_token', result.data.accessToken);
-            loadMain()
+            loadMain(user)
         }else {
             if(res.status == 401) {
                 promptMessage.innerText = result.messages[0];

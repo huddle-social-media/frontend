@@ -1,4 +1,4 @@
-import { acceptIssue, markIssueChatAsRead, sendIssueChat } from "../../apis/commonAPIs/issueApi.js";
+import { acceptIssue, markIssueChatAsRead, rejectIssue, sendIssueChat } from "../../apis/commonAPIs/issueApi.js";
 import Component from "../../lib/flux/component/Component.js";
 import IssueCardActions from "../IssueCard/IssueCardActions.js";
 import IssueCardEvents from "../IssueCard/IssueCardEvents.js";
@@ -14,15 +14,18 @@ class Issue extends Component
         super(props);
         this.subscriber = this.subscriber.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
+        this.props.optionSelected = 0;
         this.setReducer("Issue", IssueReducer);
+        this.onCreate = this.onCreate.bind(this);
         this.setSubscriber("Issue", this.subscriber);
         this.acceptIssue = this.acceptIssue.bind(this);
         this.render = this.render.bind(this);
         this.props.lastDate = "";
     }
 
-    async subscriber(state, action)
+    subscriber(state, action)
     {
+        
         switch(action.type){
             case IssueCardEvents.SELECT_ISSUE:{
                 if(state.Issue.newIssue == false)
@@ -39,44 +42,48 @@ class Issue extends Component
                 }
 
                 this.refs.interest.innerHTML = state.Issue.selectedIssue.props.interest;
-
-                if(state.Issue.selectedIssue.props.messages && state.Issue.selectedIssue.props.messages.length != 0 && this.props.subSection == "/accepted" && state.Issue.selectedIssue.props.chat_status == 'open' && state.Issue.selectedIssue.props.state == 'open')
+                
+                if(((state.Issue.selectedIssue.props.messages && state.Issue.selectedIssue.props.messages.length !=0 )|| ( state.Issue.selectedIssue.props.unReadMessages && state.Issue.selectedIssue.props.unReadMessages.length != 0)) && this.props.subSection == "/accepted" && state.Issue.selectedIssue.props.chat_status == 'open' && ((this.props.user_type == "casual" && state.Issue.selectedIssue.props.state == 'accepted') || (state.Issue.selectedIssue.props.state == 'open') ))
                 {
                     let htmlStr = ``;
                     htmlStr = htmlStr.concat(`<div class="bg-color-light-gray v-border-r-32px grid__collg12 grid__colmd12 grid__colsm12 v-margin-l-32px v-margin-r-32px v-margin-b-16px" style="height: 15.313rem; padding: 1rem 0rem 1rem 1rem;" id="message-section">
                                                 <div style="display: flex; flex-direction: column; height:100%; overflow:overlay; margin-right:2rem;" id="message-box">
                     <!-- We inject messages here -->`);
-                    state.Issue.selectedIssue.props.messages.forEach(message => {
-                        if(message.message_date != this.props.lastDate)
-                        {
-                            this.props.lastDate = message.message_date;
-                            htmlStr = htmlStr.concat(`<div class="f-w-rg t-ex-sm" style="align-self: center;">${message.message_date}</div>`);
-                        }
-                        if(!(message.user_id == state.Issue.selectedIssue.props.me))
-                        {
-                            htmlStr = htmlStr.concat(`<div class="v-margin-l-16px v-margin-b-16px v-margin-r-16px v-margin-t-16px" style="max-width:45%;">
-                            <div class="v-border-r-36px f-w-rg t-sm t-color-dark" style="padding: 1.25rem 1.5rem; background-color: #E4E4E4; border-bottom-left-radius: 0; width: fit-content;">
+                    if(state.Issue.selectedIssue.props.messages && state.Issue.selectedIssue.props.messages.length != 0)
+                    {
+                        state.Issue.selectedIssue.props.messages.forEach(message => {
+                            if(message.message_date != this.props.lastDate)
+                            {
+                                this.props.lastDate = message.message_date;
+                                htmlStr = htmlStr.concat(`<div class="f-w-rg t-ex-sm" style="align-self: center;">${message.message_date}</div>`);
+                            }
+                            if(!(message.user_id == state.Issue.selectedIssue.props.me))
+                            {
+                                htmlStr = htmlStr.concat(`<div class="v-margin-l-16px v-margin-b-16px v-margin-r-16px v-margin-t-16px" style="max-width:45%;">
+                                <div class="v-border-r-36px f-w-rg t-sm t-color-dark" style="padding: 1.25rem 1.5rem; background-color: #E4E4E4; border-bottom-left-radius: 0; width: fit-content;">
+                                    ${message.message}
+                                </div>
+                                <div class="f-w-rg t-ex-sm t-color-gray" style="margin-top: 0.25rem;">${message.message_time}</div>
+                            </div>`);
+                            }else
+                            {
+                                htmlStr = htmlStr.concat(`<div class="v-margin-b-16px v-margin-r-16px v-margin-t-16px" style="display: flex; flex-direction: column; align-self: flex-end; max-width:45%;">
+                                <div class="v-border-r-36px f-w-rg t-sm t-color-white bg-color-orange" style="padding: 1.25rem 1.5rem; border-bottom-right-radius: 0; width: fit-content;">
                                 ${message.message}
-                            </div>
-                            <div class="f-w-rg t-ex-sm t-color-gray" style="margin-top: 0.25rem;">${message.message_time}</div>
-                        </div>`);
-                        }else
-                        {
-                            htmlStr = htmlStr.concat(`<div class="v-margin-b-16px v-margin-r-16px v-margin-t-16px" style="display: flex; flex-direction: column; align-self: flex-end; max-width:45%;">
-                            <div class="v-border-r-36px f-w-rg t-sm t-color-white bg-color-orange" style="padding: 1.25rem 1.5rem; border-bottom-right-radius: 0; width: fit-content;">
-                            ${message.message}
-                            </div>
-                            <div class="f-w-rg t-ex-sm t-color-gray" style="margin-top: 0.25rem; align-self: flex-end;">${message.message_time}</div>
-                        </div>`);
-                        }
-                        
-                    });
+                                </div>
+                                <div class="f-w-rg t-ex-sm t-color-gray" style="margin-top: 0.25rem; align-self: flex-end;">${message.message_time}</div>
+                            </div>`);
+                            }
+                            
+                        });
+                    }
 
-                    if(state.Issue.selectedIssue.props.unReadMessages.length != 0)
+                    if(state.Issue.selectedIssue.props.unReadMessages && state.Issue.selectedIssue.props.unReadMessages.length != 0)
                     {
                         let messagesList = [];
                         state.Issue.selectedIssue.props.unReadMessages.forEach(message => {
                             messagesList.push(message.message_id);
+                            
                             if(window.IssueCollection.props.issueList[state.Issue.selectedIssueId].props.messages)
                             {
                                 window.IssueCollection.props.issueList[state.Issue.selectedIssueId].props.messages.push(message);
@@ -105,8 +112,8 @@ class Issue extends Component
 
                         window.IssueCollection.props.issueList[state.Issue.selectedIssueId].props.unReadMessages = [];
                         state.Issue.selectedIssue.props.unReadMessages = []
-
-                        if(await markIssueChatAsRead(messagesList))
+                        
+                        markIssueChatAsRead(messagesList).then(()=>
                         {
                             let htmlStr1 = `<div class="grid__collg12 grid__colmd12 grid__colsm12 v-margin-l-32px v-border-r-24px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; width: 5.125rem; height: 2.154375rem; background-color: #08AA82;" data-ref="tagTwo" id="tagTwo${state.Issue.selectedIssue.props.id}">Resolved</div>`;
                             let htmlStr2 = `<div class="grid__collg12 grid__colmd12 grid__colsm12 v-margin-l-32px v-border-r-24px t-color-white f-w-rg t-ex-sm" style="display: flex; justify-content: center; align-items: center; background-color: #08AA82;" data-ref="tagThree" id="tagThree${state.Issue.selectedIssue.props.id}"></div>`;
@@ -123,7 +130,7 @@ class Issue extends Component
                             
 
                             
-                        }
+                        });
                         
 
                         
@@ -136,12 +143,14 @@ class Issue extends Component
 
                     let msgBox = document.getElementById("message-box");
                     msgBox.scrollTop = msgBox.scrollHeight;
-                }else if(!(state.Issue.selectedIssue.props.chat_status == 'open' && state.Issue.selectedIssue.props.state == 'open'))
+                }else if(!(state.Issue.selectedIssue.props.chat_status == 'open' && ((this.props.user_type == "casual" && state.Issue.selectedIssue.props.state == 'accepted') || (state.Issue.selectedIssue.props.state == 'open') )))
                 {
                     if(this.refs.issueMessageInput)
                     {
                         this.refs.issueMessageInput.remove();
                     }
+
+                    
                     
                 }
 
@@ -222,9 +231,17 @@ class Issue extends Component
             if(event.keyCode == 13 && event.target.value !== "")
             {
                 const curr = this.props.selectedIssue.props;
-                console.log(curr);
+                let id = null;
+                if(this.props.user_type === 'casual')
+                {
+                    id = curr.accepted_user;
+                }else
+                {
+                    id = curr.user_id;
+                }
+                console.log(id, this.props.user_type);
 
-                const data = await sendIssueChat(curr.issue_id, event.target.value, curr.user_id, null);
+                const data = await sendIssueChat(curr.issue_id, event.target.value,id , null);
                 this.dispatch(IssueActions.sendMessage(data));
                 event.target.value = "";
                 document.getElementById("message-box").scrollTo({top:document.getElementById("message-box").scrollHeight, left:0, behavior: 'smooth'});
@@ -235,8 +252,17 @@ class Issue extends Component
             if(messageField.value !== "")
             {
                 const curr = this.props.selectedIssue.props;
+                let id = null;
 
-                const data = await sendIssueChat(curr.issue_id, messageField.value, curr.user_id, null);
+                if(this.props.user_type == 'casual')
+                {
+                    id = curr.accepted_user;
+                }else
+                {
+                    id = curr.user_id;
+                }
+
+                const data = await sendIssueChat(curr.issue_id, messageField.value, id, null);
                 this.dispatch(IssueActions.sendMessage(data));
                 messageField.value = "";
                 document.getElementById("message-box").scrollTo({top:document.getElementById("message-box").scrollHeight, left:0, behavior: 'smooth'});
@@ -255,17 +281,68 @@ class Issue extends Component
         
     }
 
+    async rejectIssue(event=null)
+    {
+        
+        if(event)
+        {
+            event.stopPropagation();
+        }
+        if(await rejectIssue(this.props.selectedIssue.props.issue_id))
+        {
+            this.dispatch(middleNavActions.selectASubSection(`/issues${this.props.subSection}`));
+        }  
+        
+    }
+
+    onCreate()
+    {
+        this.refs.optionsBtn.addEventListener('click', ()=>{
+            if(this.props.optionSelected == 0)
+            {
+                document.getElementById('dropdownBox').style.display = 'block';
+                this.props.optionSelected = 1;
+            }else
+            {
+                document.getElementById('dropdownBox').style.display = 'none';
+                this.props.optionSelected = 0
+            }
+        });
+
+        if(this.props.subSection == '/accepted'  && this.props.user_type != 'casual')
+        {
+            this.refs.optionRejectIssue.addEventListener('click', (event) => {
+                event.stopPropagation();
+                this.rejectIssue();
+                document.getElementById('dropdownBox').style.display = 'none';
+                this.props.optionSelected = 0
+            });
+        }
+    }
+
     render()
     {
         let htmlStr = `
-                    <div class="bg-card v-border-r-32px bg-color-white v-margin-l-32px v-margin-r-32px f-poppins grid grid__collg12 grid__colmd12 grid__colsm12" data-ref="issue">
+                    <div class="bg-card v-border-r-32px bg-color-white v-margin-l-32px v-margin-r-32px f-poppins grid grid__collg12 grid__colmd12 grid__colsm12" data-ref="issue" style="display:none;" id="issueBox">
                         <div class="grid v-margin-t-32px v-margin-l-32px v-margin-r-32px v-margin-b-32px grid__collg12 grid__colmd12 grid__colsm12" data-ref="topBar">
                             <div class="t-color-dark h-md grid__collg11 grid__colmd11 grid__colsm11" data-ref="issueTitle"></div>
                             <div class="t-color-gray t-sm f-w-rg grid__collg1 grid__colmd1 grid__colsm1" style="display: flex; align-items: center;">
                                 <div class="v-margin-r-16px" data-ref="interest"></div>
-                                <div><span class="material-icons">more_horiz</span></div>
+                                <div style="position:relative;">
+                                    <span class="material-icons" data-ref="optionsBtn">more_horiz</span>
+                                    <div id="dropdownBox" class="bg-card bg-color-white" style="border-radius: 0.5rem; border: #7E7E7E solid 1px; overflow: hidden; height: fit-content; z-index: 200; right:0; width: 7rem; position: absolute; display: none;">  `;
+                                        if(this.props.subSection == '/accepted' && this.props.user_type != 'casual')
+                                        {
+                                            htmlStr = htmlStr.concat(`<div class="dropdownItem" style="display: flex; justify-content: center; padding: 0.5rem 0rem; border-bottom: #7E7E7E solid 1px;" data-ref="optionRejectIssue">Reject Issue</div>`);
+                                        }
+                                        htmlStr = htmlStr.concat(`
+                                        <div class="dropdownItem" style="display: flex; justify-content: center; padding: 0.5rem 0rem;">Report</div>
+                                    
+                                    
+                                    </div>
+                                </div>
                             </div>
-                        </div>`;
+                        </div>`);
         if(this.props.messages && this.props.subSection == "/accepted")
         {
             htmlStr = htmlStr.concat(`<div class="bg-color-light-gray v-border-r-32px v-margin-l-32px v-margin-r-32px v-margin-b-16px" style="height: 15.313rem;" data-ref="issue_message_box">
@@ -280,7 +357,7 @@ class Issue extends Component
             });
             htmlStr = htmlStr.concat(`</div>`);
         }
-
+        
         if(this.props.subSection == "/accepted")
         {
             htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-gray bg-color-light-gray v-border-r-32px v-margin-l-32px v-margin-r-32px messages-input__area grid v-margin-b-32px" data-ref="issueMessageInput" style="height: 4rem; padding: 1rem;">
@@ -300,13 +377,14 @@ class Issue extends Component
     <div class="grid__collg12 grid__colmd12 grid__colsm12 t-md t-color-gray v-margin-l-32px v-margin-r-32px v-margin-b-64px" data-ref="issueDescription" style="max-height: 100vh; overflow: auto;">
         
     </div>`);
-    if(this.props.subSection == "/pending")
+    if(this.props.subSection == "/pending" && this.props.user_type != 'casual')
     {
-        htmlStr = htmlStr.concat(`<div class="v-margin-b-64px grid__collg12 grid__colmd12 grid__colsm12" style="display: flex; flex-direction: row; column-gap: 4rem; justify-content: center; align-items: center;">
+        htmlStr = htmlStr.concat(`<div class="v-margin-b-64px grid__collg12 grid__colmd12 grid__colsm12" style="display: flex; flex-direction: row; column-gap: 4rem; justify-content: center; align-items: center;" data-ref="decisionBtn">
         <div class="bg-color-orange btn f-w-sb t-rg t-color-white v-border-r-16px" style="width: 13rem; border: 1px solid #FE793D; height: 4rem; display: flex; justify-content: center; align-items: center;" onClick="window.${this.name}.acceptIssue(event)">Accept</div>
-        <div class="bg-color-white btn f-w-sb t-rg t-color-orange v-border-r-16px" style="width: 13rem; border: 1px solid #C4C4C4; height: 4rem; display: flex; justify-content: center; align-items: center;">Reject</div>
+        <div class="bg-color-white btn f-w-sb t-rg t-color-orange v-border-r-16px" style="width: 13rem; border: 1px solid #C4C4C4; height: 4rem; display: flex; justify-content: center; align-items: center;" onClick="window.${this.name}.rejectIssue(event)">Reject</div>
     </div>`);
     }
+    
     if(this.props.subSection == "/accepted") //Only in Casual User's App
     {
         htmlStr = htmlStr.concat(`<div class="grid__collg12 grid__colmd12 grid__colsm12 t-color-dark v-margin-t-32px v-margin-l-32px v-margin-b-32px" style="display: flex; align-items: center;">

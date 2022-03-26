@@ -1,65 +1,46 @@
 import createComponent from "../../lib/flux/createComponent/createComponent.js";
-import { getPosts } from "../../apis/commonAPIs/postApi.js";
-import MiddleNav from "../../components/MiddleNav/MiddleNav.js";
-import { appInitializer } from "../../components/App/App.js";
-import Timeline from "../../components/Timeline/Timeline.js";
-import Popups from "../../components/Popups/Popups.js";
-import TipsSection from "../../components/Tips/TipsSection.js";
-import StorySection from "../../components/Stories/StorySection.js";
 
-const initializer = (userInfo) => {
+const initializer = (user) => {
     window.__LOADED_SCRIPTS__['main'] = true;
-    const TYPE = 'casual';
+    const TYPE = user.aud;
+    const AVAILABLE_USER_TYPES = ["casual", "organization", "celebrity", "admin"];
 
     if(window.__LEFT_PANEL__ && window.__MIDDLE_PANEL__ && window.__RIGHT_PANEL__ && window.__MIDDLE_NAV__) {
-        if(TYPE && TYPE === 'casual') {
-            import("../../views/users/casual/index.js").then((casualComponents) => { 
-                try {
-                    const sidebar = new casualComponents.Sidebar({ sidebarLinks: casualComponents.sidebarLinks });
-                    let node = createComponent(sidebar);
-                    window[sidebar.name] = sidebar;
-                    window.__LEFT_PANEL__.appendChild(node);
-
-                    const tips = [{tipText: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cumque tenetur eligendi ad aliquam praesentium voluptates? Aperiam ut incidunt dicta dolores?", name: "Rajitha Kumara", username: "rajitha_kumar", propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, interest: "cricket"}, {tipText: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cumque tenetur eligendi ad aliquam praesentium voluptates? Aperiam ut incidunt dicta dolores?", name: "Rajitha Kumara", username: "rajitha_kumar", propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, interest: "swim"}, {tipText: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cumque tenetur eligendi ad aliquam praesentium voluptates? Aperiam ut incidunt dicta dolores?", name: "Rajitha Kumara", username: "rajitha_kumar", propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, interest: "football"}];
-
-                    const tipSection = new TipsSection({ tips: tips });
-                    node = createComponent(tipSection);
-                    window.__RIGHT_PANEL__.appendChild(node);
-
-                    // for debug
-                    getPosts().then(posts => {
-                        window.__POSTS__ = {};
-                        const timeline = new Timeline();
-
-                        // temp stories
-                        let stories = [ 
-                            { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` }, { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` }, { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` }, { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` }, 
-                        { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` }, { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` },
-                        { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` }, { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` },
-                        { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` }, { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` }, { firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` },{ firstImg: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}`, propicUrl: `https://source.unsplash.com/random/1900x800?sig=${Math.floor(Math.random()*100)}` }];
-
-                        const storySection = new StorySection({ stories: stories });
-                        timeline.setChildComponents("storySection", storySection);
-                        let node = createComponent(timeline);
-                        window[timeline.name] = timeline;
-                        window.__MIDDLE_PANEL__.appendChild(node);
-                    }).catch(e => {
-                        console.log(e);
-                    })
-                    appInitializer('rajitha_kumar');
-                    const middleNav = new MiddleNav();
-                    node = createComponent(middleNav);
-                    window.__MIDDLE_NAV__.appendChild(node);
-                    casualComponents.activateRoutes();
-                    
-                } catch (e) {
-                    console.log(e);
-                }
+        if(AVAILABLE_USER_TYPES.includes(TYPE) && TYPE === 'casual') {
+            import("../../views/users/casual/index.js").then(components => {
                 
-            }).catch(e => {
-                console.log("failed", e);
+                const casualComp = components.default;
+                window.__LEFT_PANEL__.appendChild(createComponent(casualComp.GLOBAL_CONST_COMP.sidebar));
+                casualComp.GLOBAL_CONST_COMP.appInitializer(user, casualComp);
+                window.__MIDDLE_NAV__.appendChild(createComponent(new casualComp.MIDDLE_NAV.MiddleNav({navs:{ "/settings": [{href: "/account", name: "Account"}, {href: "/analytics", name: "Analytics"},  {href: "/privacy", name: "Privacy"}], "/explore": [{href: "/interest", name: "Interest"}, {href: "/global", name: "Global"}], "/events": [{href:"/attending", name: "Attending"}, {href: "/onGoing", name: "On Going"}],'/advertisements': [{href:'/active', name:"Active"}, {href:"/posted", name:"Posted"}] ,"/issues":[{href:"/accepted", name:"Accepted"}, {href: "/pending", name: "Pending"}]}})))
+                casualComp.GLOBAL_CONST_COMP.activateRoutes(casualComp);
+
+            }).catch(err => {
+                console.log(err);
             });
+
+        }else if(AVAILABLE_USER_TYPES.includes(TYPE) && TYPE === 'celebrity') {
+
             
+
+        }else if(AVAILABLE_USER_TYPES.includes(TYPE) && TYPE === 'organization') {
+
+            import("../../views/users/organization/index.js").then(components => {
+                
+                const casualComp = components.default;
+                window.__LEFT_PANEL__.appendChild(createComponent(casualComp.GLOBAL_CONST_COMP.sidebar));
+                casualComp.GLOBAL_CONST_COMP.appInitializer(user, casualComp);
+                window.__MIDDLE_NAV__.appendChild(createComponent(new casualComp.MIDDLE_NAV.MiddleNav({navs:{ "/settings": [{href: "/account", name: "Account"}, {href: "/analytics", name: "Analytics"},  {href: "/privacy", name: "Privacy"}], "/explore": [{href: "/interest", name: "Interest"}, {href: "/global", name: "Global"}], "/events": [{href:"/attending", name: "Attending"}, {href: "/onGoing", name: "On Going"}],'/advertisements': [{href:'/active', name:"Active"}, {href:"/posted", name:"Posted"}] ,"/issues":[{href:"/accepted", name:"Accepted"}, {href: "/pending", name: "Pending"}]}})))
+                casualComp.GLOBAL_CONST_COMP.activateRoutes(casualComp);
+
+            }).catch(err => {
+                console.log(err);
+            });
+
+        }else if(AVAILABLE_USER_TYPES.includes(TYPE) && TYPE === 'admin') {
+
+        }else {
+            //error
         }
     }
 }

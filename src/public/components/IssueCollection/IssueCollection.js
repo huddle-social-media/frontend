@@ -10,7 +10,7 @@ class IssueCollection extends Component
         super(props);
         this.props['issueList'] = [];
         this.props['lastDate'] = "";
-        this.validIssues = 0;
+        this.props.validIssues = 0;
         this.updateList = this.updateList.bind(this);
         this.onCreate = this.onCreate.bind(this);
         this.render = this.render.bind(this);
@@ -19,8 +19,9 @@ class IssueCollection extends Component
     updateList()
     {
         
-        if(this.props.pending)
+        if(this.props.pending && this.props.pending.length != 0)
         {
+            document.getElementById('issueBox').style.display = 'block';
             const issueColl = this.refs.issueColl;
             this.props.pending.forEach(item => {
                 item['id'] = this.props.issueList.length;
@@ -38,17 +39,17 @@ class IssueCollection extends Component
                 window[tempIssueCard.name] = tempIssueCard;
             });
 
-            this.validIssues += this.props.pending.length;
+            this.props.validIssues += this.props.pending.length;
             this.props.pending = [];
 
             
 
             this.dispatch(IssueCardActions.selectIssue({id:0, data:this.props.issueList[0]}));
 
-        }else if(this.validIssues == 0)
+        }else if(this.props.validIssues == 0)
         {
             window.__MIDDLE_PANEL__.innerHTML = "";
-            window.__MIDDLE_PANEL__.innerHTML = `<div class="bg-card h-md t-color-gray v-border-r-32px bg-color-white v-margin-l-32px v-margin-t-64px v-margin-r-32px f-poppins" style="align-items: center; padding: 2rem 0rem; text-align: center;" data-ref="issue">Hooray!!! No pending issues at this moment.</div>`;
+            window.__MIDDLE_PANEL__.innerHTML = `<div class="bg-card h-md t-color-gray v-border-r-32px bg-color-white v-margin-l-32px v-margin-t-64px v-margin-r-32px f-poppins" style="align-items: center; padding: 2rem 0rem; text-align: center;" data-ref="issue">Hooray!!! No issues at this moment.</div>`;
 
         }
 

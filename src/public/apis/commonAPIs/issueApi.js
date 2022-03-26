@@ -13,7 +13,7 @@ const getIssuesOnUser = async () => {
             }
     });
     const result = await res.json();
-
+    console.log(result);
     if(res.ok) {
         let resData = result.data
         return resData
@@ -44,6 +44,50 @@ const getIssuesAcceptedByUser = async () => {
     }
 }
 
+const getMyAcceptedIssues = async () => {
+    const token = localStorage.getItem('access_token');
+    const res = await fetch("https://huddleapi.com/issues/my_accepted_issues", {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",         
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+    });
+    const result = await res.json();
+    console.log(result);
+
+    if(res.ok) {
+        let resData = result.data
+        return resData
+    }else {
+        console.log("Error when retrieving accepted issues based on user");
+    }
+}
+
+const getMyPendingIssues = async () => {
+    const token = localStorage.getItem('access_token');
+    const res = await fetch("https://huddleapi.com/issues/my_pending_issues", {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",         
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+    });
+    const result = await res.json();
+    console.log(result);
+
+    if(res.ok) {
+        let resData = result.data
+        return resData
+    }else {
+        console.log("Error when retrieving pending issues based on user");
+    }
+}
+
 const acceptIssue = async (issueId) => {
     const token = localStorage.getItem('access_token');
     const res = await fetch("https://huddleapi.com/issues/accept_issue", {
@@ -66,6 +110,28 @@ const acceptIssue = async (issueId) => {
     }
 }
 
+const rejectIssue = async (issueId) => {
+    const token = localStorage.getItem('access_token');
+    const res = await fetch("https://huddleapi.com/issues/reject_issue", {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",         
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                issue_id: parseInt(issueId)
+              })
+    });
+
+    if(res.ok) {
+        return true;
+    }else {
+        console.log("Error when rejecting issue");
+    }
+}
+
 
 const markIssueChatAsRead = async (messages) => {
     const token = localStorage.getItem('access_token');
@@ -83,7 +149,7 @@ const markIssueChatAsRead = async (messages) => {
     });
 
     if(res.ok) {
-        return true;
+        return res;
     }else {
         console.log("Error when marking messages as read");
     }
@@ -168,6 +234,8 @@ const getUnSentIssueChat = async () => {
     }
 }
 
+
+
 function updateIssueChat()
 {
 
@@ -226,4 +294,4 @@ function updateIssueChat()
     
 }
 
-export {getIssuesOnUser, getIssuesAcceptedByUser, acceptIssue, markIssueChatAsRead, sendIssueChat, createIssue, getUnSentIssueChat, updateIssueChat};
+export {getIssuesOnUser, rejectIssue, getIssuesAcceptedByUser, getMyPendingIssues, acceptIssue, markIssueChatAsRead, sendIssueChat, createIssue, getUnSentIssueChat, updateIssueChat, getMyAcceptedIssues};

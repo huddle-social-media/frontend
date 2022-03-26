@@ -79,15 +79,9 @@ import EventCollection from "../../../components/EventCollection/EventCollection
 
 const EVENT_COLLECTION = {EventCollection};
 
-import IssueCreatePopup from "../../../components/IssueCreatePopup/IssueCreatePopup.js"
-
-
-const ISSUE_CREATE_POPUP = {IssueCreatePopup};
-
 import Issue from "../../../components/Issue/Issue.js";
 import IssueActions from "../../../components/Issue/IssueActions.js";
 import IssueEvents from "../../../components/Issue/IssueEvents.js";
-import IssueReducer from "../../../components/Issue/IssueReducer.js";
 
 const ISSUE = {Issue, IssueActions, IssueEvents};
 
@@ -99,10 +93,18 @@ const ISSUE_CARD = {IssueCard, IssueCardActions, IssueCardEvents};
 
 import IssueCollection from "../../../components/IssueCollection/IssueCollection.js";
 
+import IssueCreatePopup from "../../../components/IssueCreatePopup/IssueCreatePopup.js"
+
 const ISSUE_COLLECTION = {IssueCollection};
 
+const ISSUE_CREATE_POPUP = {IssueCreatePopup};
+
+import EventCreatePopup from "../../../components/EventCreatePopup/EventCreatePopup.js"
+
+const EVENT_CREATE_POPUP = {EventCreatePopup};
+
 import activateRoutes from "./routes.js";
-import appInitializer  from "../../../components/App/CasualApp.js";
+import appInitializer  from "../../../components/App/OrganizationApp.js";
 import appActions from "../../../components/App/AppActions.js";
 import appEvents from "../../../components/App/AppEvents.js";
 import appReducer from "../../../components/App/AppReducer.js";
@@ -123,5 +125,5 @@ const sidebar = new Sidebar({sidebarLinks: sidebarLinks});
 const GLOBAL_CONST_COMP = { sidebar, store, activateRoutes, appInitializer };
 
 export default {
-    SIDEBAR, POST, COMMENT, MIDDLE_NAV, POPUPS,  GET, ISSUE_CREATE_POPUP,EVENT_MAP, EVENT_COLLECTION , EVENT_CARD, ISSUE, ISSUE_COLLECTION, ISSUE_CARD, PROFILE, PUBLISH_BTN, TIPS, TIMELINE, STORY, STORE, APP, GLOBAL_CONST_COMP
+    SIDEBAR, POST, COMMENT, MIDDLE_NAV, POPUPS, EVENT_CREATE_POPUP, ISSUE_CREATE_POPUP, GET, EVENT_MAP, EVENT_COLLECTION , EVENT_CARD, ISSUE, ISSUE_COLLECTION, ISSUE_CARD, PROFILE, PUBLISH_BTN, TIPS, TIMELINE, STORY, STORE, APP, GLOBAL_CONST_COMP
 };

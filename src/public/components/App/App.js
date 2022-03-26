@@ -28,6 +28,11 @@ import AdCollection from "../AdCollection/AdCollection.js";
 import EventCardEvents from "../EventCard/EventCardEvents.js";
 import IssueCreatePopup from "../IssueCreatePopup/IssueCreatePopup.js";
 import EventCreatePopup from "../EventCreatePopup/EventCreatePopup.js";
+import PublishBtn from "../PublishBtn/PublishBtn.js";
+import publishBtnEvents from "../PublishBtn/PublishBtnEvents.js";
+import ChatCard from "../ChatCard/ChatCard.js";
+import appEvents from "./AppEvents.js";
+import ChatCollection from "../ChatCollection/ChatCollection.js";
 
 const appInitializer = (username) => {
     // populating event listenter for middle content for listenening to scrolling event 
@@ -37,6 +42,15 @@ const appInitializer = (username) => {
             clientHeight : window.__MIDDLE_PANEL__.clientHeight,
             scrollHeight : window.__MIDDLE_PANEL__.scrollHeight
          }));
+    });
+
+    let btn = new PublishBtn({contents: [{type: "event", icon: "event"}, {type: "issue", icon: "lightbulb"}]});
+    let element = createComponent(btn);
+    document.body.appendChild(element);
+
+    document.getElementById('chatBtn').addEventListener('click', (event)=>{
+        event.stopPropagation();
+        store.dispatch(appActions.chatClicked());
     });
 
     const subscriber = (state, action) => {
@@ -53,6 +67,7 @@ const appInitializer = (username) => {
                 store.dispatch(popupsActions.closePopupWindow());
                 break;
             }
+
             case popupsEvents.CLOSE_POPUP_WINDOW: {
                 const popups = document.getElementById('popups');
                 if(popups) {
@@ -83,18 +98,36 @@ const appInitializer = (username) => {
                 break;
             }
 
-            case EventCardEvents.RENDER_EXPAND_VIEW:{
-                const popup = new EventCreatePopup('hello', {});
-                let element = createComponent(popup);
-                window[popup.name] = popup;
+            case publishBtnEvents.PUBLISH_A_CONTENT:{
+                if(state['PublishBtn'].selectedType == 'event')
+                {
+                    const popup = new EventCreatePopup('hello', {});
+                    let element = createComponent(popup);
+                    window[popup.name] = popup;
 
-                const popups = new Popups();
-                popups.setChildComponents("popupWindow", popup);
-                element = createComponent(popups);
-                document.body.appendChild(element);
-                window.Popups = popups;
-                window.history.pushState("", "", `https://huddle.com/events/createEvent`);
-                break;
+                    const popups = new Popups();
+                    popups.setChildComponents("popupWindow", popup);
+                    element = createComponent(popups);
+                    document.body.appendChild(element);
+                    window.Popups = popups;
+                    window.history.pushState("", "", `https://huddle.com/events/createEvent`);
+                    break;
+                }
+
+                if(state['PublishBtn'].selectedType == 'issue')
+                {
+                    const popup = new IssueCreatePopup('hello', {});
+                    let element = createComponent(popup);
+                    window[popup.name] = popup;
+
+                    const popups = new Popups();
+                    popups.setChildComponents("popupWindow", popup);
+                    element = createComponent(popups);
+                    document.body.appendChild(element);
+                    window.Popups = popups;
+                    window.history.pushState("", "", `https://huddle.com/issues/createIssue`);
+                    break;
+                }
             }
 
             case middleNavEvents.SELECT_A_SUB_SECTION:{
@@ -105,16 +138,20 @@ const appInitializer = (username) => {
                 if(state['MiddleNav'].currentSubSection == "/events/onGoing")
                 {
                     window.__MIDDLE_PANEL__.innerText = '';
-                    const eventMap = new EventMap({subSection: "/onGoing"});
-                    let element = createComponent(eventMap);
+                    // const eventMap = new EventMap({subSection: "/onGoing"});
+                    // let element = createComponent(eventMap);
+                    // window.__MIDDLE_PANEL__.appendChild(element);
+                    // window[eventMap.name] = eventMap;
+                    // getAllEvents().then((data) => {
+                    //     const eventCollection = new EventCollection({pending : data});
+                    //     element = createComponent(eventCollection);
+                    //     window.__MIDDLE_PANEL__.appendChild(element);
+                    //     window[eventCollection.name] = eventCollection;
+                    // });
+
+                    let obj = new ChatCard({});
+                    element = createComponent(obj);
                     window.__MIDDLE_PANEL__.appendChild(element);
-                    window[eventMap.name] = eventMap;
-                    getAllEvents().then((data) => {
-                        const eventCollection = new EventCollection({pending : data});
-                        element = createComponent(eventCollection);
-                        window.__MIDDLE_PANEL__.appendChild(element);
-                        window[eventCollection.name] = eventCollection;
-                    });
                     
                     
                     break;
@@ -192,18 +229,27 @@ const appInitializer = (username) => {
 
                 if(state['MiddleNav'].currentSubSection == "/advertisements/posted")
                 {
-                    window.__MIDDLE_PANEL__.innerText = "";
+                    
 
                     const adCollection = new AdCollection({subSection: "/active", pending: [{"ad_date":"2022-03-11"}]});
                     console.log(adCollection);
                     let element = createComponent(adCollection);
-                    console.log(element);
                     window.__MIDDLE_PANEL__.appendChild(element);
                     window[adCollection.name] = adCollection;
 
                     
                     break;
                 }
+            }
+
+            case appEvents.CHAT_CLICKED:{
+                window.__MIDDLE_PANEL__.innerText = "";
+                window.history.pushState("", "", `https://huddle.com/chats`);
+                let chatColl = new ChatCollection({pending:[{text:"Hello"}, {text:"Hi"}]});
+                let element = createComponent(chatColl);
+                window.__MIDDLE_PANEL__.appendChild(element);
+                window[chatColl.name] = chatColl;
+                break;
             }
         }
     }

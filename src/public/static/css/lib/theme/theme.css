@@ -578,3 +578,8 @@ a {
     height: 2.25rem;
 }
 
+.dropdownItem:hover{
+    background-color: #FE793D;
+    color: white;
+}
+
